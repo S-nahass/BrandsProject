@@ -17,7 +17,8 @@ public class UserMenu {
             System.out.println("User Menu");
             System.out.println("1. Browse Brands");
             System.out.println("2. Search Brands by Criteria");
-            System.out.println("3. Exit to Main Menu");
+            System.out.println("3. Inquire about Brand History");
+            System.out.println("4. Exit to Main Menu");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
@@ -49,6 +50,9 @@ public class UserMenu {
                             System.out.println("Invalid choice. Please enter a valid option.");
                     }
                 case 3:
+                    inquireBrandHistory(brands);
+                    break;
+                case 4:
                     System.out.println("Exiting to the main menu.");
                     break;
                 default:
@@ -98,7 +102,7 @@ public class UserMenu {
             viewBrandDetails(brand);
         }
 
-        scanner.close();
+
     }
 
     private void viewBrandDetails(Brand brand) {
@@ -149,5 +153,28 @@ public class UserMenu {
             }
         }
     }
+
+    public void inquireBrandHistory(List<Brand> brands) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the name of the brand you want to inquire about:");
+        String brandName = scanner.nextLine();
+
+        Brand selectedBrand = null;
+        for (Brand brand : brands) {
+            if (brand.getName().equalsIgnoreCase(brandName)) {
+                selectedBrand = brand;
+                break;
+            }
+        }
+
+        if (selectedBrand != null) {
+            System.out.println("Brand: " + selectedBrand.getName());
+            System.out.println("History: " + selectedBrand.getBrandHistory());
+        } else {
+            System.out.println("Brand not found.");
+        }
+    }
+
 }
 
