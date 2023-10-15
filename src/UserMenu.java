@@ -18,7 +18,8 @@ public class UserMenu {
             System.out.println("1. Browse Brands");
             System.out.println("2. Search Brands by Criteria");
             System.out.println("3. Inquire about Brand History");
-            System.out.println("4. Exit to Main Menu");
+            System.out.println("4. View product listing for a brand");
+            System.out.println("5. Exit to Main Menu");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
@@ -53,6 +54,10 @@ public class UserMenu {
                     inquireBrandHistory(brands);
                     break;
                 case 4:
+                    // View product listing for a brand
+                    viewAndInquireAboutProduct(brands);
+                    break;
+                case 5:
                     System.out.println("Exiting to the main menu.");
                     break;
                 default:
@@ -175,6 +180,50 @@ public class UserMenu {
             System.out.println("Brand not found.");
         }
     }
+
+    public void viewAndInquireAboutProduct(List<Brand> brands) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the name of the brand to view its product listings:");
+        String brandName = scanner.nextLine();
+
+        Brand selectedBrand = null;
+        for (Brand brand : brands) {
+            if (brand.getName().equalsIgnoreCase(brandName)) {
+                selectedBrand = brand;
+                break;
+            }
+        }
+
+        if (selectedBrand != null) {
+            System.out.println("Products for " + selectedBrand.getName() + ":");
+            List<Product> products = selectedBrand.getProducts();
+            for (int i = 0; i < products.size(); i++) {
+                Product product = products.get(i);
+                System.out.println((i + 1) + ". " + product.getName());
+            }
+
+            System.out.print("Enter the number of the product to inquire about (0 to go back): ");
+            int productChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            if (productChoice > 0 && productChoice <= products.size()) {
+                Product selectedProduct = products.get(productChoice - 1);
+                System.out.println("Product Name: " + selectedProduct.getName());
+                System.out.println("Price: " + selectedProduct.getPrice());
+                System.out.println("Description: " + selectedProduct.getDescription());
+                // You can add more product details here if needed
+            } else if (productChoice == 0) {
+                // User chose to go back
+                return;
+            } else {
+                System.out.println("Invalid product choice.");
+            }
+        } else {
+            System.out.println("Brand not found.");
+        }
+    }
+
 
 }
 

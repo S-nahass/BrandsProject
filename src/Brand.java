@@ -62,6 +62,14 @@ public class Brand {
     public String getBrandHistory() {
         return brandHistory;
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
 }
   /*  public List<Product> getProducts() {
         return products;
@@ -71,9 +79,7 @@ public class Brand {
         return feedback;
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
-    }
+
 
     public void removeProduct(Product product) {
         products.remove(product);
