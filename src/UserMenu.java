@@ -5,9 +5,11 @@ import java.util.ArrayList;
 public class UserMenu {
     private List<Brand> brands;
     private Scanner scanner;
+    private List<Brand> favoriteBrands; // Declare // favoriteBrands variable
 
     public UserMenu(List<Brand> brands) {
         this.brands = brands;
+        this.favoriteBrands = new ArrayList<>();
         this.scanner = new Scanner(System.in);
     }
 
@@ -19,7 +21,9 @@ public class UserMenu {
             System.out.println("2. Search Brands by Criteria");
             System.out.println("3. Inquire about Brand History");
             System.out.println("4. View product listing for a brand");
-            System.out.println("5. Exit to Main Menu");
+            System.out.println("5. Mark Brand as favorite");
+            System.out.println("6. Show My favorite Brands");
+            System.out.println(". Exit to Main Menu");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
@@ -58,6 +62,12 @@ public class UserMenu {
                     viewAndInquireAboutProduct(brands);
                     break;
                 case 5:
+                    markBrandAsFavorite(new BrandDatabase());
+                    break;
+                case 6:
+                    viewFavoriteBrands();
+                    break;
+                case 7:
                     System.out.println("Exiting to the main menu.");
                     break;
                 default:
@@ -223,6 +233,46 @@ public class UserMenu {
             System.out.println("Brand not found.");
         }
     }
+    public void markBrandAsFavorite(BrandDatabase brandDatabase) {
+        // Display a list of available brands to the user
+        List<Brand> brands = brandDatabase.getBrands();
+        System.out.println("Available Brands:");
+        for (int i = 0; i < brands.size(); i++) {
+            System.out.println((i + 1) + ". " + brands.get(i).getName());
+        }
+
+        // Ask the user to select a brand to mark as a favorite
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of the brand you want to mark as a favorite: ");
+        int choice = scanner.nextInt();
+
+        // Check if the user's choice is valid
+        if (choice >= 1 && choice <= brands.size()) {
+            Brand selectedBrand = brands.get(choice - 1);
+
+            // Mark the selected brand as a favorite for the user
+            favoriteBrands.add(selectedBrand); // Add the brand to the favoriteBrands list
+
+            System.out.println(selectedBrand.getName() + " has been marked as a favorite.");
+        } else {
+            System.out.println("Invalid choice. Please select a valid brand.");
+        }
+    }
+
+    public void viewFavoriteBrands() {
+
+        if (favoriteBrands.isEmpty()) {
+            System.out.println("You haven't marked any brands as favorites yet.");
+        } else {
+            System.out.println("Your Favorite Brands:");
+            for (Brand brand : favoriteBrands) {
+                System.out.println(brand.getName());
+            }
+        }
+    }
+
+
+
 
 
 }
