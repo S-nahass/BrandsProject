@@ -79,6 +79,7 @@ public class UserMenu {
                 System.out.println("Returning to the menu.");
                 validInput = true;
             } else {
+
                 try {
                     brandNumber = Integer.parseInt(input);
                     if (brandNumber >= 1 && brandNumber <= brands.size()) {
