@@ -2,17 +2,32 @@ import java.util.Date;
 
 public class UserReview {
     private String userName;
-    private Date date;
     private Product product;
     private int rating;
     private String content;
+    private Brand brand;
 
-    public UserReview(String userName, Date date, Product product, int rating, String content) {
+    public UserReview(String userName, Product product, int rating, String content) {
         this.userName = userName;
-        this.date = date;
         this.product = product;
         this.rating = rating;
         this.content = content;
+    }
+
+
+    public UserReview(String userName, Brand selectedBrand, int rating, String reviewText) {
+        this.userName = userName;
+        this.brand = selectedBrand;
+        this.rating = rating;
+        this.content = reviewText;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 
     public String getUserName() {
@@ -23,13 +38,7 @@ public class UserReview {
         this.userName = userName;
     }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public Product getProduct() {
         return product;
@@ -59,7 +68,6 @@ public class UserReview {
     public String toString() {
         return "UserReview{" +
                 "userName='" + userName + '\'' +
-                ", date=" + date +
                 ", product=" + product +
                 ", rating=" + rating +
                 ", content='" + content + '\'' +

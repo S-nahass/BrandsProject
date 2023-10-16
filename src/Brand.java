@@ -8,7 +8,7 @@ public class Brand {
     private String countryOfOrigin;
     private List<Product> products;
     //  private List<UserFeedback> feedback;
-    private List<Review> brandReviews;
+    private List<UserReview> brandReviews;
 
     private String brandHistory;
     private PerformanceData performanceData;
@@ -52,8 +52,8 @@ public class Brand {
         this.performanceData = performanceData;
     }
 
-    public void setBrandReviews(List<Review> brandReviews) {
-        this.brandReviews = brandReviews;
+    public void setBrandReviews(List<UserReview> brandReviews) {
+      this.brandReviews = brandReviews;
     }
 
 
@@ -85,7 +85,7 @@ public class Brand {
         return products;
     }
 
-    public List<Review> getBrandReviews() {
+    public List<UserReview> getBrandReviews() {
         return brandReviews;
     }
 
@@ -95,12 +95,12 @@ public class Brand {
 
 
 
-    public void addReview(String review, int rating) {
-        Review newReview = new Review(review);
+  /* public void addReview(String review, int rating) {
+        UserReview newReview = new Review(review);
         newReview.setRating(rating);
         newReview.setText(review);
         brandReviews.add(newReview);
-    }
+    }*/
 
 
     public void setBrandPerformance(PerformanceData brand1Performance) {
@@ -111,6 +111,9 @@ public class Brand {
         products.remove(product);
     }
 
+    public void addUserReview(UserReview userReview) {
+        brandReviews.add(userReview);
+    }
 }
 
 

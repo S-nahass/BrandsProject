@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BrandDatabase {
-    private List<Brand> brands;
+    private static List<Brand> brands;
     private List<PerformanceData> performanceDataList;
 
 
@@ -177,7 +177,7 @@ public class BrandDatabase {
     }
 
 
-    public List<Brand> getBrands() {
+    public static List<Brand> getBrands() {
         return brands;
     }
 

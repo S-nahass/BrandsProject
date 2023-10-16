@@ -65,7 +65,6 @@ public class AdminMenu {
                 case 9:
                     // Monitor User Feedback
                     monitorUserFeedback();
-                    // TODO: Implement monitorUserFeedback method
                     break;
                 case 10:
                     System.out.println("Exiting to the main menu.");
@@ -482,7 +481,124 @@ public class AdminMenu {
     }
 
     public void monitorUserFeedback() {
+        Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Monitoring User Feedback");
+
+        // Display a list of available brands
+        System.out.println("Available Brands:");
+        for (int i = 0; i < brands.size(); i++) {
+            Brand brand = brands.get(i);
+            System.out.println((i + 1) + ". " + brand.getName());
+        }
+
+        // Ask the admin to choose a brand
+        System.out.print("Select a brand by entering the corresponding number: ");
+        int brandChoice = scanner.nextInt();
+
+        // Check if the choice is within the valid range
+        if (brandChoice >= 1 && brandChoice <= brands.size()) {
+            Brand selectedBrand = brands.get(brandChoice - 1); // Adjust for 0-based index
+            System.out.println("You selected: " + selectedBrand.getName());
+
+            System.out.println("1. View User Reviews for Brand");
+            System.out.println("2. View User Reviews for Products");
+            System.out.println("3. Analyze User Feedback");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    List<UserReview> brandReviews = FeedbackManagement.getReviewsForBrand(selectedBrand);
+                    if (!brandReviews.isEmpty()) {
+                        for (UserReview review : brandReviews) {
+                            System.out.println("User: " + review.getUserName());
+                            System.out.println("Rating: " + review.getRating());
+                            System.out.println("Review: " + review.getContent());
+                        }
+                    } else {
+                        System.out.println("No user reviews for this brand.");
+                    }
+                    break;
+
+                case 2:
+                    List<Product> products = selectedBrand.getProducts();
+                    System.out.println("Available Products:");
+                    for (int i = 0; i < products.size(); i++) {
+                        Product product = products.get(i);
+                        System.out.println((i + 1) + ". " + product.getName());
+                    }
+                    System.out.print("Select a product by entering the corresponding number: ");
+                    int productChoice = scanner.nextInt();
+
+                    if (productChoice >= 1 && productChoice <= products.size()) {
+                        Product selectedProduct = products.get(productChoice - 1); // Adjust for 0-based index
+                        List<UserReview> productReviews = FeedbackManagement.getReviewsForProduct(selectedProduct);
+                        if (!productReviews.isEmpty()) {
+                            for (UserReview review : productReviews) {
+                                System.out.println("User: " + review.getUserName());
+                                System.out.println("Rating: " + review.getRating());
+                                System.out.println("Review: " + review.getContent());
+                            }
+                        } else {
+                            System.out.println("No user reviews for this product.");
+                        }
+                    } else {
+                        System.out.println("Invalid product choice.");
+                    }
+                    break;
+
+                case 3:
+                    analyzeUserFeedback();
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } else {
+            System.out.println("Invalid brand choice.");
+        }
+    }
+
+
+    public void analyzeUserFeedback() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Analyze User Feedback:");
+        System.out.println("Please choose a brand:");
+
+        // List available brands for the user to choose from
+        List<Brand> brands = BrandDatabase.getBrands();
+        for (int i = 0; i < brands.size(); i++) {
+            System.out.println((i + 1) + ". " + brands.get(i).getName());
+        }
+
+        int brandChoice = scanner.nextInt();
+        if (brandChoice < 1 || brandChoice > brands.size()) {
+            System.out.println("Invalid brand choice.");
+            return;
+        }
+
+        Brand selectedBrand = brands.get(brandChoice - 1);
+
+        System.out.println("Analyzing User Feedback for " + selectedBrand.getName());
+        System.out.println("1. Calculate Average Ratings for Products");
+        System.out.println("2. Generate Feedback Trends Report");
+
+        int choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                FeedbackManagement.calculateAverageRatingsByProduct();
+                break;
+
+            case 2:
+                FeedbackManagement.generateFeedbackTrendsReport();
+                break;
+
+            default:
+                System.out.println("Invalid choice.");
+        }
     }
 
 

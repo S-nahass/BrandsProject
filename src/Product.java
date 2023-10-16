@@ -4,7 +4,7 @@ public class Product {
     private String name;
     private double price;
     private String description;
-    private List<Review> productReviews;
+    private List<UserReview> productReviews;
 
     private int quantityInStock;   // Added field to track the quantity in stock
     private int quantityPurchased;  // Added field to track the quantity purchased
@@ -49,7 +49,7 @@ public class Product {
         return quantityPurchased;
     }
 
-    public List<Review> getProductReviews() {
+    public List<UserReview> getProductReviews() {
         return productReviews;
     }
 
@@ -63,13 +63,13 @@ public class Product {
 
 
 
-    public void addReview(String review, int rating) {
-        Review newReview = new Review(review);
-        newReview.setRating(rating);
-        newReview.setText(review);
-        productReviews.add(newReview);    }
 
-    public List<Review> getReviews() {
+
+    public List<UserReview> getReviews() {
         return productReviews;
+    }
+
+    public void addUserReview(UserReview userReview) {
+        productReviews.add(userReview);
     }
 }

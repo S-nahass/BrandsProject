@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeedbackManagement {
-    private List<UserReview> userReviews;
-    private List<Brand> brands;
+    private static List<UserReview> userReviews;
+    private static List<Brand> brands;
 
 
 
@@ -12,9 +12,20 @@ public class FeedbackManagement {
         this.brands = new ArrayList<>();
     }
 
+    public static List<UserReview> getReviewsForBrand(Brand brand) {
+        List<UserReview> reviewsForBrand = new ArrayList<>();
+        for (UserReview review : userReviews) {
+            if (review.getBrand() == brand) {
+                reviewsForBrand.add(review);
+            }
+        }
+        return reviewsForBrand;
+    }
 
 
-    public void calculateAverageRatingsByProduct() {
+
+
+    public static void calculateAverageRatingsByProduct() {
         for (Brand brand : brands) {
             List<Product> products = brand.getProducts();
 
@@ -40,7 +51,7 @@ public class FeedbackManagement {
         }
     }
 
-    public List<UserReview> getReviewsForProduct(Product product) {
+    public static List<UserReview> getReviewsForProduct(Product product) {
         List<UserReview> reviewsForProduct = new ArrayList<>();
         for (UserReview review : userReviews) {
             if (review.getProduct() == product) {
@@ -77,7 +88,7 @@ public class FeedbackManagement {
         }
     }
 
-    public void generateFeedbackTrendsReport() {
+    public static void generateFeedbackTrendsReport() {
         System.out.println("Feedback Trends Report");
 
         if (userReviews.isEmpty()) {
