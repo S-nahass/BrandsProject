@@ -3,7 +3,8 @@ import java.util.List;
 
 public class BrandDatabase {
     private static List<Brand> brands;
-    private List<PerformanceData> performanceDataList;
+    private static List<PerformanceData> performanceDataList;
+
 
 
     public BrandDatabase() {
@@ -11,6 +12,10 @@ public class BrandDatabase {
         this.performanceDataList = new ArrayList<>();
         initializeTestData();
         initializeBrandPerformanceTestData();
+    }
+
+    public static List<PerformanceData> getPerformanceDataList() {
+        return performanceDataList;
     }
 
     private void initializeTestData() {
