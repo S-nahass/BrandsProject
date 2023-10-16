@@ -7,6 +7,7 @@ public class Main {
         AdminMenu adminMenu = new AdminMenu(brandDatabase.getBrands());
         UserMenu userMenu = new UserMenu(brandDatabase.getBrands());
 
+
         int choice;
         do {
             System.out.println("Main Menu");

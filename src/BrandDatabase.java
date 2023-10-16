@@ -26,10 +26,6 @@ public class BrandDatabase {
         brand2.addProduct(product4);
         brands.add(brand2);
 
-        // Continue adding brands and their products
-        // Brand 3, 4, 5, ... up to 20
-        // Add 2 products for each brand
-
         // Brand 3: Gucci
         Brand brand3 = new Brand("Gucci", "Luxury", 1921, "Italy", "Gucci is an Italian luxury brand known for its high-end fashion and leather goods.");
         Product product5 = new Product("Luxury Leather Bag", 899.99, "Elegant leather bag for the fashion-conscious.");

@@ -8,7 +8,10 @@ public class Brand {
     private String countryOfOrigin;
     private List<Product> products;
     //  private List<UserFeedback> feedback;
+    private List<Review> brandReviews;
+
     private String brandHistory;
+
     public Brand(String name, String category, int yearFounded, String countryOfOrigin, String brandHistory) {
         this.name = name;
         this.category = category;
@@ -16,7 +19,7 @@ public class Brand {
         this.countryOfOrigin = countryOfOrigin;
         this.brandHistory = brandHistory;
         this.products = new ArrayList<>();
-        // this.feedback = new ArrayList<>();
+        this.brandReviews = new ArrayList<>();
     }
 
     public Brand(String name, String category, int yearFounded, String countryOfOrigin) {
@@ -40,6 +43,10 @@ public class Brand {
 
     public void setBrandHistory(String brandHistory) {
         this.brandHistory = brandHistory;
+    }
+
+    public void setBrandReviews(List<Review> brandReviews) {
+        this.brandReviews = brandReviews;
     }
 
 
@@ -67,10 +74,32 @@ public class Brand {
         return products;
     }
 
+    public List<Review> getBrandReviews() {
+        return brandReviews;
+    }
+
     public void addProduct(Product product) {
         products.add(product);
     }
+
+    public void addReview(Brand brand, Review review) {
+        brand.getBrandReviews().add(review);
+    }
+
+
+
+    public void addReview(String review, int rating) {
+        Review newReview = new Review(review);
+        newReview.setRating(rating);
+        newReview.setText(review);
+        brandReviews.add(newReview);
+    }
+
+
+
 }
+
+
   /*  public List<Product> getProducts() {
         return products;
     }
