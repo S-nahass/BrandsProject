@@ -44,22 +44,25 @@ public class UserMenu {
                 case 2:
                     System.out.println("1. Search Brands by Category");
                     System.out.println("2. Search Brands by Country of Origin");
+                    System.out.println("3. Exit to the main menu.");
                     System.out.print("Enter your choice: ");
-                    int subChoice = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
-                    switch (subChoice) {
-                        case 1:
-                            searchBrandsByCategory(scanner);
-                            break;
-                        case 2:
-                            searchBrandsByCountryOfOrigin(scanner);
-                            break;
-                        case 3:
-                            System.out.println("Exiting to the main menu.");
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Please enter a valid option.");
-                    }
+                    do {
+                        choice = scanner.nextInt();
+                        scanner.nextLine(); //
+                        switch (choice) {
+                            case 1:
+                                searchBrandsByCategory(scanner);
+                                break;
+                            case 2:
+                                searchBrandsByCountryOfOrigin(scanner);
+                                break;
+                            case 3:
+                                System.out.println("Exiting to the main menu.");
+                                break;
+                        }
+
+                    }    while (choice != 3) ;
+                    break;
                 case 3:
                     inquireBrandHistory(brands);
                     break;

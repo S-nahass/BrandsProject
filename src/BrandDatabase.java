@@ -3,9 +3,12 @@ import java.util.List;
 
 public class BrandDatabase {
     private List<Brand> brands;
+    private List<PerformanceData> performanceDataList;
+
 
     public BrandDatabase() {
         this.brands = new ArrayList<>();
+        this.performanceDataList = new ArrayList<>();
         initializeTestData();
         initializeBrandPerformanceTestData();
     }
@@ -179,27 +182,26 @@ public class BrandDatabase {
     }
 
     private void initializeBrandPerformanceTestData() {
-        // Brand 1: Nike
-        Brand brand1 = brands.get(0);
-        PerformanceData brand1Performance = new PerformanceData(brand1.getName());
 
-        // Add performance data for brand1
-        PerformanceData brand1Data = new PerformanceData("Nike");
+        for (Brand brand : brands) {
+            PerformanceData brandPerformance = new PerformanceData(brand.getName());
 
-        // Add sales records for brand1
-        brand1Data.addSalesRecord(new SalesRecord(2021, 200000, 550000.0));
-        brand1Data.addSalesRecord(new SalesRecord(2020, 180000, 500000.0));
-        brand1Data.addSalesRecord(new SalesRecord(2019, 170000, 480000.0));
+            // Generate random sales records for the brand
+            for (int year = 2020; year <= 2022; year++) {
+                int quantitySold = (int) (Math.random() * 1000) + 100;
+                double totalRevenue = Math.random() * 50000 + 1000;
+                brandPerformance.addSalesRecord(new SalesRecord(year, quantitySold, totalRevenue));
+            }
 
-        // Add product popularity for brand1
-        brand1Data.addProductPopularity(new ProductPopularity("Air Max Running Shoes", (int) 4.5));
-        brand1Data.addProductPopularity(new ProductPopularity("Dri-FIT Sports T-Shirt", (int) 4.2));
+            // Generate random product popularity data for the brand's products
+            for (Product product : brand.getProducts()) {
+                ProductPopularity popularity = new ProductPopularity(product.getName(), (int) (Math.random() * 100));
+                brandPerformance.addProductPopularity(popularity);
+            }
 
-        brand1Performance.setPerformanceData(brand1Data);
-
-        // Set the brand performance data for brand1
-        brand1.setBrandPerformance(brand1Performance);
-
+            // Add the brand's performance data to the performanceDataList
+            performanceDataList.add(brandPerformance);
+        }
 
     }
 }

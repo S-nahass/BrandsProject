@@ -20,7 +20,6 @@ public class PerformanceData {
         return salesHistory;
     }
 
-
     public List<ProductPopularity> getProductPopularity() {
         return productPopularity;
     }
@@ -29,14 +28,13 @@ public class PerformanceData {
         salesHistory.add(salesRecord);
     }
 
-
     public void addProductPopularity(ProductPopularity popularity) {
         productPopularity.add(popularity);
     }
 
     public void setPerformanceData(PerformanceData brand1Data) {
-        this.salesHistory = brand1Data.getSalesHistory();
-        this.productPopularity = brand1Data.getProductPopularity();
+        this.salesHistory.addAll(brand1Data.getSalesHistory());
+        this.productPopularity.addAll(brand1Data.getProductPopularity());
     }
 }
 
@@ -64,8 +62,6 @@ class SalesRecord {
     }
 }
 
-
-
 class ProductPopularity {
     private String productName;
     private int popularityScore;
@@ -82,7 +78,5 @@ class ProductPopularity {
     public int getPopularityScore() {
         return popularityScore;
     }
-
-
 
 }

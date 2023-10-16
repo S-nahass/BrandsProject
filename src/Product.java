@@ -9,6 +9,8 @@ public class Product {
     private int quantityInStock;   // Added field to track the quantity in stock
     private int quantityPurchased;  // Added field to track the quantity purchased
 
+    private int inventoryLevel; // Add an inventoryLevel field
+
 
 
     public Product(String name, double price, String description) {
@@ -18,6 +20,8 @@ public class Product {
         this.quantityInStock = quantityInStock;
         this.quantityPurchased = 0;  // Initialize purchased quantity to 0
         this.productReviews = new ArrayList<>();
+        this.inventoryLevel = inventoryLevel;
+
     }
 
 
@@ -48,6 +52,15 @@ public class Product {
     public List<Review> getProductReviews() {
         return productReviews;
     }
+
+    public void setInventoryLevel(int inventoryLevel) {
+        this.inventoryLevel = inventoryLevel;
+    }
+
+    public int getInventoryLevel() {
+        return inventoryLevel;
+    }
+
 
 
     public void addReview(String review, int rating) {

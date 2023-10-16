@@ -106,6 +106,11 @@ public class Brand {
     public void setBrandPerformance(PerformanceData brand1Performance) {
         this.performanceData = brand1Performance;
     }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
+
 }
 
 
