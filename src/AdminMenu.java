@@ -40,10 +40,11 @@ public class AdminMenu {
                     break;
                 case 3:
                     // Remove Brand
-                    // TODO: Implement removeBrand method
+                    removeBrand(brands);
                     break;
                 case 4:
                     // Add Product to Brand
+                    addProductToBrand();
                     // TODO: Implement addProductToBrand method
                     break;
                 case 5:
@@ -150,5 +151,62 @@ public class AdminMenu {
 
         System.out.println("Brand details updated successfully.");
     }
+
+    private void removeBrand(List<Brand> brands) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the name of the brand you want to remove: ");
+        String brandName = scanner.nextLine();
+
+        Brand brandToRemove = null;
+        for (Brand brand : brands) {
+            if (brand.getName().equalsIgnoreCase(brandName)) {
+                brandToRemove = brand;
+                break;
+            }
+        }
+
+        if (brandToRemove == null) {
+            System.out.println("Brand not found.");
+            return;
+        }
+
+        brands.remove(brandToRemove);
+        System.out.println("Brand removed successfully.");
+    }
+
+    public void addProductToBrand() {
+        System.out.println("Enter the name of the brand to which you want to add a product:");
+        String brandName = scanner.nextLine();
+
+        Brand selectedBrand = null;
+        for (Brand brand : brands) {
+            if (brand.getName().equalsIgnoreCase(brandName)) {
+                selectedBrand = brand;
+                break;
+            }
+        }
+
+        if (selectedBrand != null) {
+            System.out.print("Enter the name of the new product: ");
+            String productName = scanner.nextLine();
+            System.out.print("Enter the price of the new product: ");
+            double productPrice = scanner.nextDouble();
+            scanner.nextLine(); // Consume the newline character
+            System.out.print("Enter the description of the new product: ");
+            String productDescription = scanner.nextLine();
+
+            // Create a new product
+            Product newProduct = new Product(productName, productPrice, productDescription);
+
+            // Add the new product to the selected brand
+            selectedBrand.addProduct(newProduct);
+
+            System.out.println("New product added to " + selectedBrand.getName() + ": " + productName);
+        } else {
+            System.out.println("Brand not found.");
+        }
+    }
+
 
 }

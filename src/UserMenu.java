@@ -3,9 +3,9 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class UserMenu {
-    private List<Brand> brands;
-    private Scanner scanner;
-    private List<Brand> favoriteBrands; // Declare // favoriteBrands variable
+    private final List<Brand> brands;
+    private final Scanner scanner;
+    private final List<Brand> favoriteBrands; // Declare // favoriteBrands variable
 
     public UserMenu(List<Brand> brands) {
         this.brands = brands;
@@ -28,7 +28,8 @@ public class UserMenu {
             System.out.println("9. Check brand score");
             System.out.println("10. Leave review/rating for a product");
             System.out.println("11. Check Product score");
-            System.out.println(". Exit to Main Menu");
+            System.out.println("12. Check Brand's Performance Data");
+            System.out.println("13. Exit to Main Menu");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
@@ -53,7 +54,7 @@ public class UserMenu {
                         case 2:
                             searchBrandsByCountryOfOrigin(scanner);
                             break;
-                        case 4:
+                        case 3:
                             System.out.println("Exiting to the main menu.");
                             break;
                         default:
@@ -88,13 +89,16 @@ public class UserMenu {
                     viewProductReviews();
                     break;
                 case 12:
+                    //viewBrandPerformance(new PerformanceData());
+                    break;
+                case 13:
                     System.out.println("Exiting to the main menu.");
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
             }
 
-        } while (choice != 3) ;
+        } while (choice != 12) ;
     }
 
 
@@ -150,6 +154,7 @@ public class UserMenu {
     private void searchBrandsByCategory(Scanner scanner) {
         System.out.print("Enter the category to search for: ");
         String category = scanner.nextLine();
+
 
         List<Brand> matchingBrands = new ArrayList<>();
         for (Brand brand : brands) {
@@ -392,7 +397,9 @@ public class UserMenu {
                 System.out.println("No reviews and ratings available for " + selectedBrand.getName() + ".");
             } else {
                 System.out.println("Reviews and Ratings for " + selectedBrand.getName() + ":");
-                for (Review review : brandReviews) {
+                for (int i = 0; i < brandReviews.size(); i++) {
+                    Review review = brandReviews.get(i);
+                    System.out.println("Review " + (i + 1) + ":");
                     System.out.println("Rating: " + review.getRating());
                     System.out.println("Review: " + review.getText());
                     System.out.println("-----");
@@ -509,6 +516,44 @@ public class UserMenu {
                 System.out.println("Brand not found.");
             }
         }
+    public void viewBrandPerformance(PerformanceData performanceData) {
+        System.out.println("View Brand Performance and Product Sales");
+
+        if (performanceData == null) {
+            System.out.println("Performance data not available.");
+            return;
+        }
+
+        System.out.println("Name: " + performanceData.getName());
+
+        // Display past sales trends
+        System.out.println("Past Sales Trends:");
+        List<SalesRecord> salesHistory = performanceData.getSalesHistory();
+        if (salesHistory.isEmpty()) {
+            System.out.println("No sales data available.");
+        } else {
+            System.out.println("Year | Quantity Sold | Total Revenue");
+            for (SalesRecord salesRecord : salesHistory) {
+                System.out.println(salesRecord.getYear() + " | " + salesRecord.getQuantitySold() + " | $" + salesRecord.getTotalRevenue());
+            }
+        }
+
+        // Display product popularity
+        System.out.println("Product Popularity:");
+        List<ProductPopularity> productPopularity = performanceData.getProductPopularity();
+        if (productPopularity.isEmpty()) {
+            System.out.println("No product popularity data available.");
+        } else {
+            System.out.println("Product | Popularity Score");
+            for (ProductPopularity popularity : productPopularity) {
+                System.out.println(popularity.getProductName() + " | " + popularity.getPopularityScore());
+            }
+        }
+
+        // You can also display other relevant performance data here, such as user reviews and ratings.
+
+        System.out.println("End of Brand Performance and Product Sales.");
+    }
 
 
 

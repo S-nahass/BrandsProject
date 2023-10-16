@@ -1,17 +1,12 @@
 public class Review {
-    private String user;
     private String text;
     private int rating;
 
-    public Review(String user) {
-        this.user = user;
-
+    public Review(String review) {
+        this.text = review;
+        this.rating = 0;
     }
 
-
-    public void setUser(String user) {
-        this.user = user;
-    }
 
     public void setText(String text) {
         this.text = text;
@@ -21,9 +16,7 @@ public class Review {
         this.rating = rating;
     }
 
-    public String getUser() {
-        return user;
-    }
+
 
     public String getText() {
         return text;
