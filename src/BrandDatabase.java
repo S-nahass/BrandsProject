@@ -8,8 +8,8 @@ public class BrandDatabase {
 
 
     public BrandDatabase() {
-        this.brands = new ArrayList<>();
-        this.performanceDataList = new ArrayList<>();
+        brands = new ArrayList<>();
+        performanceDataList = new ArrayList<>();
         initializeTestData();
         initializeBrandPerformanceTestData();
     }
