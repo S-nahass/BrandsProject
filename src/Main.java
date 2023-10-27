@@ -4,8 +4,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         BrandDatabase brandDatabase = new BrandDatabase();
-        AdminMenu adminMenu = new AdminMenu(brandDatabase.getBrands());
-        UserMenu userMenu = new UserMenu(brandDatabase.getBrands());
+        AdminMenu adminMenu = new AdminMenu(BrandDatabase.getBrands());
+        UserMenu userMenu = new UserMenu(BrandDatabase.getBrands());
 
 
         int choice;

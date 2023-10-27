@@ -41,42 +41,6 @@ public class FeedbackManagement {
         }
     }
 
-    public static List<UserReview> getReviewsForProduct(Product product) {
-        List<UserReview> reviewsForProduct = new ArrayList<>();
-        for (UserReview review : userReviews) {
-            if (review.getProduct() == product) {
-                reviewsForProduct.add(review);
-            }
-        }
-        return reviewsForProduct;
-    }
-
-    public List<UserReview> getReviewsByUser(String userName) {
-        List<UserReview> reviewsByUser = new ArrayList<>();
-        for (UserReview review : userReviews) {
-            if (review.getUserName().equalsIgnoreCase(userName)) {
-                reviewsByUser.add(review);
-            }
-        }
-        return reviewsByUser;
-    }
-
-
-    public void generateProductFeedbackReport(Product product) {
-        System.out.println("Product Feedback Report for " + product.getName());
-        List<UserReview> reviewsForProduct = getReviewsForProduct(product);
-
-        if (reviewsForProduct.isEmpty()) {
-            System.out.println("No feedback available for this product.");
-        } else {
-            for (UserReview review : reviewsForProduct) {
-                System.out.println("User: " + review.getUserName());
-                System.out.println("Rating: " + review.getRating());
-                System.out.println("Comment: " + review.getContent());
-                System.out.println();
-            }
-        }
-    }
 
     public static void generateFeedbackTrendsReport() {
         System.out.println("Feedback Trends Report");

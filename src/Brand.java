@@ -11,7 +11,6 @@ public class Brand {
     private List<UserReview> brandReviews;
 
     private String brandHistory;
-    private PerformanceData performanceData;
 
     public Brand(String name, String category, int yearFounded, String countryOfOrigin, String brandHistory) {
         this.name = name;
@@ -21,7 +20,6 @@ public class Brand {
         this.brandHistory = brandHistory;
         this.products = new ArrayList<>();
         this.brandReviews = new ArrayList<>();
-        this.performanceData = new PerformanceData(this.name);
     }
 
 
@@ -40,18 +38,6 @@ public class Brand {
 
     public void setCountry(String country) {
         this.countryOfOrigin = country;
-    }
-
-    public void setBrandHistory(String brandHistory) {
-        this.brandHistory = brandHistory;
-    }
-
-    public void setPerformanceData(PerformanceData performanceData) {
-        this.performanceData = performanceData;
-    }
-
-    public void setBrandReviews(List<UserReview> brandReviews) {
-      this.brandReviews = brandReviews;
     }
 
 
@@ -75,10 +61,6 @@ public class Brand {
         return brandHistory;
     }
 
-    public PerformanceData getPerformanceData() {
-        return performanceData;
-    }
-
     public List<Product> getProducts() {
         return products;
     }
@@ -91,19 +73,6 @@ public class Brand {
         products.add(product);
     }
 
-
-
-  /* public void addReview(String review, int rating) {
-        UserReview newReview = new Review(review);
-        newReview.setRating(rating);
-        newReview.setText(review);
-        brandReviews.add(newReview);
-    }*/
-
-
-    public void setBrandPerformance(PerformanceData brand1Performance) {
-        this.performanceData = brand1Performance;
-    }
 
     public void removeProduct(Product product) {
         products.remove(product);

@@ -32,10 +32,6 @@ public class PerformanceData {
         productPopularity.add(popularity);
     }
 
-    public void setPerformanceData(PerformanceData brand1Data) {
-        this.salesHistory.addAll(brand1Data.getSalesHistory());
-        this.productPopularity.addAll(brand1Data.getProductPopularity());
-    }
 }
 
 class SalesRecord {
