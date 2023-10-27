@@ -7,20 +7,15 @@ public class Product {
     private String description;
     private List<UserReview> productReviews;
 
-    private int quantityInStock;   // Added field to track the quantity in stock
-    private int quantityPurchased;  // Added field to track the quantity purchased
-
     private int inventoryLevel; // Add an inventoryLevel field
 
 
 
-    public Product(String name, double price, String description,int inventoryLevel, int quantityInStock) {
+    public Product(String name, double price, String description,int inventoryLevel) {
 
         this.name = name;
         this.price = price;
         this.description = description;
-        this.quantityInStock = quantityInStock;
-        this.quantityPurchased = 0;
         this.productReviews = new ArrayList<>();
         this.inventoryLevel = inventoryLevel;
 
@@ -40,20 +35,7 @@ public class Product {
         return description;
     }
 
-    public boolean purchase(int quantity) {
-        return false;
-    }
-    public int getQuantityInStock() {
-        return quantityInStock;
-    }
 
-    public int getQuantityPurchased() {
-        return quantityPurchased;
-    }
-
-    public List<UserReview> getProductReviews() {
-        return productReviews;
-    }
 
     public void setInventoryLevel(int inventoryLevel) {
         this.inventoryLevel = inventoryLevel;
@@ -73,5 +55,14 @@ public class Product {
 
     public void addUserReview(UserReview userReview) {
         productReviews.add(userReview);
+    }
+
+    public boolean purchase(int quantity) {
+        if (quantity <= inventoryLevel) {
+            inventoryLevel -= quantity;
+            return true;
+        } else {
+            return false;
+        }
     }
 }

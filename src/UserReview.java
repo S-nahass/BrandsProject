@@ -6,8 +6,6 @@ public class UserReview {
     private Product product;
     private int rating;
     private String content;
-    private Brand brand;
-    ArrayList<UserReview> userReviews = new ArrayList<>();
 
     public UserReview(String userName, Product product, int rating, String content) {
         this.userName = userName;
@@ -19,59 +17,25 @@ public class UserReview {
 
     public UserReview(String userName, Brand selectedBrand, int rating, String reviewText) {
         this.userName = userName;
-        this.brand = selectedBrand;
         this.rating = rating;
         this.content = reviewText;
-    }
-
-    public Brand getBrand() {
-        return brand;
-    }
-
-    public void setBrand(Brand brand) {
-        this.brand = brand;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public List<UserReview> getUserReviews() {
-        return userReviews;
-    }
-
-
 
     public Product getProduct() {
         return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public int getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
     public String getContent() {
         return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int numberOfReviews(){
-        return userReviews.size();
     }
 
 
