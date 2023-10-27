@@ -1,4 +1,5 @@
-import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UserReview {
     private String userName;
@@ -6,6 +7,7 @@ public class UserReview {
     private int rating;
     private String content;
     private Brand brand;
+    ArrayList<UserReview> userReviews = new ArrayList<>();
 
     public UserReview(String userName, Product product, int rating, String content) {
         this.userName = userName;
@@ -38,6 +40,10 @@ public class UserReview {
         this.userName = userName;
     }
 
+    public List<UserReview> getUserReviews() {
+        return userReviews;
+    }
+
 
 
     public Product getProduct() {
@@ -63,6 +69,11 @@ public class UserReview {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public int numberOfReviews(){
+        return userReviews.size();
+    }
+
 
     @Override
     public String toString() {

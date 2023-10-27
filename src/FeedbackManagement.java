@@ -7,19 +7,9 @@ public class FeedbackManagement {
 
 
 
-    public FeedbackManagement() {
-        this.userReviews = new ArrayList<>();
-        this.brands = new ArrayList<>();
-    }
-
-    public static List<UserReview> getReviewsForBrand(Brand brand) {
-        List<UserReview> reviewsForBrand = new ArrayList<>();
-        for (UserReview review : userReviews) {
-            if (review.getBrand() == brand) {
-                reviewsForBrand.add(review);
-            }
-        }
-        return reviewsForBrand;
+    public FeedbackManagement( List<Brand> brands, List<UserReview> userReviews) {
+        this.userReviews = userReviews;
+        this.brands = brands;
     }
 
 

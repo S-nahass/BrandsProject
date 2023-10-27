@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+
 public class Product {
     private String name;
     private double price;
@@ -13,12 +14,13 @@ public class Product {
 
 
 
-    public Product(String name, double price, String description) {
+    public Product(String name, double price, String description,int inventoryLevel, int quantityInStock) {
+
         this.name = name;
         this.price = price;
         this.description = description;
         this.quantityInStock = quantityInStock;
-        this.quantityPurchased = 0;  // Initialize purchased quantity to 0
+        this.quantityPurchased = 0;
         this.productReviews = new ArrayList<>();
         this.inventoryLevel = inventoryLevel;
 

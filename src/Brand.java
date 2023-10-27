@@ -24,9 +24,7 @@ public class Brand {
         this.performanceData = new PerformanceData(this.name);
     }
 
-    public Brand(String name, String category, int yearFounded, String countryOfOrigin) {
 
-    }
 
     public void setName(String name) {
         this.name = name;

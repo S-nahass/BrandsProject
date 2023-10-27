@@ -1,10 +1,11 @@
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AdminMenu {
     private List<Brand> brands;
     private Scanner scanner;
-    private List<PerformanceData> performanceDataList;
+
     public AdminMenu(List<Brand> brands) {
         this.brands = brands;
         this.scanner = new Scanner(System.in);
@@ -60,7 +61,7 @@ public class AdminMenu {
                     break;
                 case 8:
                     // Generate Reports
-                    generateReports();
+                    checkBrandPerformance();
                     break;
                 case 9:
                     // Monitor User Feedback
@@ -76,29 +77,7 @@ public class AdminMenu {
     }
 
 
-    private Brand chooseBrand() {
-        System.out.println("Available Brands:");
-        for (int i = 0; i < brands.size(); i++) {
-            System.out.println((i + 1) + ". " + brands.get(i).getName());
-        }
 
-        int choice;
-        boolean isValidChoice = false;
-
-        do {
-            System.out.print("Enter the number of the brand: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();  // Consume the newline character
-
-            if (choice < 1 || choice > brands.size()) {
-                System.out.println("Invalid choice. Please enter a valid number.");
-            } else {
-                isValidChoice = true;
-            }
-        } while (!isValidChoice);
-
-        return brands.get(choice - 1);
-    }
     private void addBrand(List<Brand> brands) {
         System.out.println("Adding a New Brand");
         System.out.print("Enter the brand name: ");
@@ -116,7 +95,7 @@ public class AdminMenu {
 
 
         // Create a new brand and add it to the list of brands
-        Brand newBrand = new Brand(name, category, yearFounded, countryOfOrigin);
+        Brand newBrand = new Brand(name, category, yearFounded, countryOfOrigin, "Brand History");
         brands.add(newBrand);
 
         System.out.println("Brand added successfully.");
@@ -213,14 +192,24 @@ public class AdminMenu {
         if (selectedBrand != null) {
             System.out.print("Enter the name of the new product: ");
             String productName = scanner.nextLine();
+
             System.out.print("Enter the price of the new product: ");
             double productPrice = scanner.nextDouble();
             scanner.nextLine(); // Consume the newline character
+
             System.out.print("Enter the description of the new product: ");
             String productDescription = scanner.nextLine();
 
+            System.out.println("number of units in stock: ");
+            int quantityInStock = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            System.out.print("Enter the inventory level: ");
+            int inventoryLevel = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
             // Create a new product
-            Product newProduct = new Product(productName, productPrice, productDescription);
+            Product newProduct = new Product(productName, productPrice, productDescription, quantityInStock, inventoryLevel);
 
             // Add the new product to the selected brand
             selectedBrand.addProduct(newProduct);
@@ -387,37 +376,35 @@ public class AdminMenu {
 
     }
 
-    public void generateReports() {
 
-        System.out.println("Choose the type of report to generate:");
-        System.out.println("1. Brand Performance Report");
-        System.out.println("2. Product Sales Report");
 
-        int reportChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
+    public void checkBrandPerformance() {
+        Scanner scanner = new Scanner(System.in);
 
-        switch (reportChoice) {
-            case 1:
-                generateBrandPerformanceReport();
-                break;
-            case 2:
-                generateProductSalesReport();
-                break;
-            default:
-                System.out.println("Invalid report choice.");
-                break;
+        System.out.println("Check Brand & Product Performance:");
+        System.out.println("Please choose a brand to check its performance:");
+
+        // List available brands for the user to choose from
+        List<Brand> brands = BrandDatabase.getBrands();
+        for (int i = 0; i < brands.size(); i++) {
+            System.out.println((i + 1) + ". " + brands.get(i).getName());
         }
-    }
 
-    private void generateBrandPerformanceReport() {
-        // Logic to generate the brand performance report
-        Brand selectedBrand = chooseBrand();
-        System.out.println("Brand Performance Report for " + selectedBrand.getName() + ":");
+        int brandChoice = scanner.nextInt();
+        if (brandChoice < 1 || brandChoice > brands.size()) {
+            System.out.println("Invalid brand choice.");
+            return;
+        }
 
-        // Retrieve performance data for the brand
-            PerformanceData performanceData = getPerformanceData(selectedBrand.getName());
+        Brand selectedBrand = brands.get(brandChoice - 1);
 
-            if (performanceData != null) {
+        // Display brand performance data
+        List<PerformanceData> performanceDataList = BrandDatabase.getPerformanceDataList();
+
+        for (PerformanceData performanceData : performanceDataList) {
+            if (performanceData.getName().equalsIgnoreCase(selectedBrand.getName())) {
+                System.out.println("Brand: " + performanceData.getName());
+
                 // Display sales records
                 List<SalesRecord> salesHistory = performanceData.getSalesHistory();
                 System.out.println("Sales Records:");
@@ -434,51 +421,13 @@ public class AdminMenu {
                     System.out.println("Product Name: " + popularity.getProductName());
                     System.out.println("Popularity Score: " + popularity.getPopularityScore());
                 }
-            } else {
-                System.out.println("Performance data not available for this brand.");
             }
         }
-
-
-    private void generateProductSalesReport() {
-
-        Brand selectedBrand = chooseBrand();
-
-        // Logic to generate the product sales report
-        System.out.println("Product Sales Report:");
-        for (Brand brand : brands) {
-            List<Product> products = brand.getProducts();
-            System.out.println("Brand: " + brand.getName());
-
-            for (Product product : products) {
-                // Retrieve performance data for the product
-                PerformanceData performanceData = getPerformanceData(product.getName());
-
-                if (performanceData != null) {
-                    // Display sales records for the product
-                    List<SalesRecord> salesHistory = performanceData.getSalesHistory();
-                    System.out.println("Product: " + product.getName());
-                    System.out.println("Sales Records:");
-                    for (SalesRecord salesRecord : salesHistory) {
-                        System.out.println("Year: " + salesRecord.getYear());
-                        System.out.println("Quantity Sold: " + salesRecord.getQuantitySold());
-                        System.out.println("Total Revenue: " + salesRecord.getTotalRevenue());
-                    }
-                } else {
-                    System.out.println("Performance data not available for this product.");
-                }
-            }
-        }
-
     }
-    private PerformanceData getPerformanceData(String name) {
-        for (PerformanceData data : performanceDataList) {
-            if (data.getName().equalsIgnoreCase(name)) {
-                return data;
-            }
-        }
-        return null; // Data not found
-    }
+
+
+
+
 
     public void monitorUserFeedback() {
         Scanner scanner = new Scanner(System.in);
@@ -509,43 +458,11 @@ public class AdminMenu {
 
             switch (choice) {
                 case 1:
-                    List<UserReview> brandReviews = FeedbackManagement.getReviewsForBrand(selectedBrand);
-                    if (!brandReviews.isEmpty()) {
-                        for (UserReview review : brandReviews) {
-                            System.out.println("User: " + review.getUserName());
-                            System.out.println("Rating: " + review.getRating());
-                            System.out.println("Review: " + review.getContent());
-                        }
-                    } else {
-                        System.out.println("No user reviews for this brand.");
-                    }
+                    viewBrandReviews(scanner);
                     break;
 
                 case 2:
-                    List<Product> products = selectedBrand.getProducts();
-                    System.out.println("Available Products:");
-                    for (int i = 0; i < products.size(); i++) {
-                        Product product = products.get(i);
-                        System.out.println((i + 1) + ". " + product.getName());
-                    }
-                    System.out.print("Select a product by entering the corresponding number: ");
-                    int productChoice = scanner.nextInt();
-
-                    if (productChoice >= 1 && productChoice <= products.size()) {
-                        Product selectedProduct = products.get(productChoice - 1); // Adjust for 0-based index
-                        List<UserReview> productReviews = FeedbackManagement.getReviewsForProduct(selectedProduct);
-                        if (!productReviews.isEmpty()) {
-                            for (UserReview review : productReviews) {
-                                System.out.println("User: " + review.getUserName());
-                                System.out.println("Rating: " + review.getRating());
-                                System.out.println("Review: " + review.getContent());
-                            }
-                        } else {
-                            System.out.println("No user reviews for this product.");
-                        }
-                    } else {
-                        System.out.println("Invalid product choice.");
-                    }
+                    viewProductReviews(scanner);
                     break;
 
                 case 3:
@@ -559,6 +476,88 @@ public class AdminMenu {
             System.out.println("Invalid brand choice.");
         }
     }
+
+    public void viewBrandReviews(Scanner scanner) {
+        System.out.println("Available Brands:");
+        for (int i = 0; i < brands.size(); i++) {
+            Brand brand = brands.get(i);
+            System.out.println((i + 1) + ". " + brand.getName());
+        }
+
+        System.out.print("Enter the number of the brand you want to see reviews for: ");
+        int brandNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        if (brandNumber < 1 || brandNumber > brands.size()) {
+            System.out.println("Invalid brand number.");
+            return;
+        }
+
+        Brand selectedBrand = brands.get(brandNumber - 1);
+
+        List<UserReview> brandReviews = selectedBrand.getBrandReviews();
+
+        if (brandReviews.isEmpty()) {
+            System.out.println("No reviews available for " + selectedBrand.getName());
+        } else {
+            System.out.println("Reviews for " + selectedBrand.getName() + ":");
+            for (UserReview review : brandReviews) {
+                System.out.println("Username: " + review.getUserName());
+                System.out.println("Rating: " + review.getRating() + " stars");
+                System.out.println("Review Text: " + review.getContent());
+                System.out.println();
+            }
+        }
+    }
+
+    public void viewProductReviews(Scanner scanner) {
+        // Display available products for the user to choose from
+        System.out.println("Available Products:");
+        for (int i = 0; i < brands.size(); i++) {
+            Brand brand = brands.get(i);
+            System.out.println("Brand: " + brand.getName());
+            List<Product> products = brand.getProducts();
+            for (int j = 0; j < products.size(); j++) {
+                Product product = products.get(j);
+                System.out.println((i + 1) + "." + (j + 1) + ". " + product.getName());
+            }
+        }
+
+        System.out.print("Enter the number of the brand and product you want to see reviews for (e.g., 1 2): ");
+        int brandNumber = scanner.nextInt();
+        int productNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        if (brandNumber < 1 || brandNumber > brands.size() || productNumber < 1) {
+            System.out.println("Invalid brand or product number.");
+            return;
+        }
+
+        Brand selectedBrand = brands.get(brandNumber - 1);
+        List<Product> products = selectedBrand.getProducts();
+
+        if (productNumber > products.size()) {
+            System.out.println("Invalid product number for the selected brand.");
+            return;
+        }
+
+        Product selectedProduct = products.get(productNumber - 1);
+
+        List<UserReview> productReviews = selectedProduct.getReviews();
+
+        if (productReviews.isEmpty()) {
+            System.out.println("No reviews available for " + selectedProduct.getName() + " in the " + selectedBrand.getName() + " brand.");
+        } else {
+            System.out.println("Reviews for " + selectedProduct.getName() + " in the " + selectedBrand.getName() + " brand:");
+            for (UserReview review : productReviews) {
+                System.out.println("Username: " + review.getUserName());
+                System.out.println("Rating: " + review.getRating() + " stars");
+                System.out.println("Review Text: " + review.getContent());
+                System.out.println();
+            }
+        }
+    }
+
 
 
     public void analyzeUserFeedback() {

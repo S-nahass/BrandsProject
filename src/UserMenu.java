@@ -465,7 +465,7 @@ public class UserMenu {
 
         System.out.println("Review for " + selectedProduct.getName() + " has been submitted.");
     }
-    private void viewReviews(Scanner scanner) {
+    public void viewReviews(Scanner scanner) {
         System.out.println("What would you like to see reviews for?");
         System.out.println("1. Brands");
         System.out.println("2. Products");
@@ -486,7 +486,7 @@ public class UserMenu {
         }
     }
 
-    private void viewBrandReviews(Scanner scanner) {
+    public void viewBrandReviews(Scanner scanner) {
         System.out.println("Available Brands:");
         for (int i = 0; i < brands.size(); i++) {
             Brand brand = brands.get(i);
@@ -520,7 +520,7 @@ public class UserMenu {
     }
 
 
-    private void viewProductReviews(Scanner scanner) {
+    public void viewProductReviews(Scanner scanner) {
         // Display available products for the user to choose from
         System.out.println("Available Products:");
         for (int i = 0; i < brands.size(); i++) {
