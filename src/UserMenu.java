@@ -17,15 +17,15 @@ public class UserMenu {
         int choice;
         do {
             System.out.println("User Menu");
-            System.out.println("1. Browse Brands");
-            System.out.println("2. Search Brands by Criteria");
-            System.out.println("3. Inquire about Brand History");
-            System.out.println("4. View product listing for a brand");
-            System.out.println("5. Mark Brand as favorite");
-            System.out.println("6. Show My favorite Brands");
-            System.out.println("7. Purchase Products from Brand of choice");
-            System.out.println("8. Leave Review for Brand or Product");
-            System.out.println("9. Check Brand/Product Reviews and Ratings");
+            System.out.println("1. Browse Brands"); // gui done
+            System.out.println("2. Search Brands by Criteria"); // gui done
+            System.out.println("3. Inquire about Brand History"); // gui done
+            System.out.println("4. View product listing for a brand"); // gui done
+            System.out.println("5. Mark Brand as favorite"); // gui done
+            System.out.println("6. Show My favorite Brands"); // gui done
+            System.out.println("7. Purchase Products from Brand of choice"); // gui done
+            System.out.println("8. Leave Review for Brand or Product"); // gui done
+            System.out.println("9. Check Brand/Product Reviews and Ratings"); // gui done
             System.out.println("10. Check Brand's Performance Data");
             System.out.println("11. Exit to Main Menu");
             System.out.print("Enter your choice: ");
