@@ -1,20 +1,27 @@
 package Swing.Frames;
+import Src.Brand;
 
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
 
 
 
 public class HomeFrame extends JFrame {
-    private String username;
+    private static String username;
     private String password;
+    private List<Brand> brands;
+
 
 
     public HomeFrame(String username) {
         this.username = username;
+        this.password = username;
+
 
         // Set up the frame
         setTitle("Clothing Retail App");
@@ -56,7 +63,7 @@ public class HomeFrame extends JFrame {
     }
 
     // Method to create the bottom menu
-    public static JPanel createBottomMenu() {
+    public JPanel createBottomMenu() {
         JPanel bottomMenu = new JPanel();
         bottomMenu.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10)); // Adjust the layout manager as needed
 
@@ -89,8 +96,11 @@ public class HomeFrame extends JFrame {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle the Home button click
-                System.out.println("Home button clicked");
+                // if home button is clicked, redirect to default homeFrame
+                SwingUtilities.invokeLater(() -> {
+                    new HomeFrame(username); // Pass the username to the HomeFrame constructor
+                    dispose();
+                });
             }
         });
 
@@ -165,19 +175,13 @@ public class HomeFrame extends JFrame {
         return searchBar;
     }
 
-    // Simulated brand search logic
     public static String performBrandSearch(String searchText) {
 
-
-        if (searchText.isEmpty()) {
-            return "Please enter a search term.";
-        } else if (searchText.contains(" ")) {
-            return "Search terms cannot contain spaces.";
-        } else {
-            return "No results found for '" + searchText + "'.";
-        }
+        return "";
     }
+
 }
+
 
 
 

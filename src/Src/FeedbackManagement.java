@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+package Src;
+
 import java.util.List;
 
 public class FeedbackManagement {
@@ -32,8 +33,8 @@ public class FeedbackManagement {
 
                 if (reviewCount > 0) {
                     double averageRating = sumRatings / reviewCount;
-                    System.out.println("Brand: " + brand.getName());
-                    System.out.println("Product: " + product.getName());
+                    System.out.println("Src.Brand: " + brand.getName());
+                    System.out.println("Src.Product: " + product.getName());
                     System.out.println("Average Rating: " + averageRating);
                     System.out.println("Total Reviews: " + reviewCount);
                 }

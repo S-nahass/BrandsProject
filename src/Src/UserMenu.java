@@ -1,3 +1,5 @@
+package Src;
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -38,7 +40,6 @@ public class UserMenu {
                     // Browse Brands
                     browseBrands(brands);
                     break;
-
                 case 2:
                     // Search Brands by Criteria
                     searchBrandsByCriteria();

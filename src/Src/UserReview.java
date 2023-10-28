@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.ArrayList;
+package Src;
 
 public class UserReview {
     private String userName;

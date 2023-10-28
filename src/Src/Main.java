@@ -1,3 +1,5 @@
+package Src;
+
 import java.util.Scanner;
 
 public class Main {
@@ -10,7 +12,7 @@ public class Main {
 
         int choice;
         do {
-            System.out.println("Main Menu");
+            System.out.println("Src.Main Menu");
             System.out.println("1. Administrator Mode");
             System.out.println("2. User Mode");
             System.out.println("3. Exit");

@@ -1,3 +1,5 @@
+package Src;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,7 +23,6 @@ public class Brand {
         this.products = new ArrayList<>();
         this.brandReviews = new ArrayList<>();
     }
-
 
 
     public void setName(String name) {
@@ -84,22 +85,3 @@ public class Brand {
 }
 
 
-  /*  public List<Product> getProducts() {
-        return products;
-    }
-
-    public List<UserFeedback> getFeedback() {
-        return feedback;
-    }
-
-
-
-    public void removeProduct(Product product) {
-        products.remove(product);
-    }
-
-    public void addFeedback(UserFeedback userFeedback) {
-        feedback.add(userFeedback);
-    }
-}
-*/
