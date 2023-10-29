@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -291,16 +293,114 @@ public class HomeFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Remove any existing components in the contentPanel
-        this.getContentPane();
+        this.getContentPane().removeAll();
 
         // Add the scrollPane with the table to the contentPanel
         this.getContentPane().add(scrollPane, BorderLayout.CENTER);
         this.getContentPane().revalidate();
         this.getContentPane().repaint();
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow >= 0) {
+                    String brandName = (String) table.getValueAt(selectedRow, 0);
+                    showBrandOptions(brandName);
+                }
+            }
+        });
+
     }
 
 
+    private void showBrandOptions(String brandName) {
+        JDialog brandOptionsDialog = createBrandOptionsDialog(brandName);
+        JPanel brandOptionsPanel = createBrandOptionsPanel();
 
+        // Create buttons for brand options
+        JButton seeBrandDetailsButton = new JButton("See Brand Details");
+        JButton seeProductsButton = new JButton("See Products");
+        JButton markAsFavoriteButton = new JButton("Mark as Favorite");
+        JButton leaveBrandReviewButton = new JButton("Leave Brand Review");
+        JButton seeBrandReviewsButton = new JButton("See Brand Reviews");
+
+        // Set font and background color for buttons
+        Font buttonFont = new Font("garamond", Font.BOLD, 15);
+        Color buttonColor = new Color(255, 255, 255); // Example color - modify as desired
+
+        seeBrandDetailsButton.setFont(buttonFont);
+        seeBrandDetailsButton.setBackground(buttonColor);
+
+        seeProductsButton.setFont(buttonFont);
+        seeProductsButton.setBackground(buttonColor);
+
+        markAsFavoriteButton.setFont(buttonFont);
+        markAsFavoriteButton.setBackground(buttonColor);
+
+        leaveBrandReviewButton.setFont(buttonFont);
+        leaveBrandReviewButton.setBackground(buttonColor);
+
+        seeBrandReviewsButton.setFont(buttonFont);
+        seeBrandReviewsButton.setBackground(buttonColor);
+
+        // Add action listeners to the buttons to handle user interactions
+        seeBrandDetailsButton.addActionListener(e -> {
+            // Handle "See Brand Details" button click
+            System.out.println("See Brand Details clicked");
+        });
+
+        seeProductsButton.addActionListener(e -> {
+            // Handle "See Products" button click
+            System.out.println("See Products clicked");
+        });
+
+        markAsFavoriteButton.addActionListener(e -> {
+            // Handle "Mark as Favorite" button click
+            System.out.println("Mark as Favorite clicked");
+        });
+
+        leaveBrandReviewButton.addActionListener(e -> {
+            // Handle "Leave Brand Review" button click
+            System.out.println("Leave Brand Review clicked");
+        });
+
+        seeBrandReviewsButton.addActionListener(e -> {
+            // Handle "See Brand Reviews" button click
+            System.out.println("See Brand Reviews clicked");
+        });
+
+        // Add the buttons to the brand options panel
+        brandOptionsPanel.add(seeBrandDetailsButton);
+        brandOptionsPanel.add(seeProductsButton);
+        brandOptionsPanel.add(markAsFavoriteButton);
+        brandOptionsPanel.add(leaveBrandReviewButton);
+        brandOptionsPanel.add(seeBrandReviewsButton);
+
+        // Add the brand options panel to the brandOptionsDialog's content pane
+        brandOptionsDialog.getContentPane().add(brandOptionsPanel);
+
+        // Set frame properties and make it visible
+        brandOptionsDialog.setSize(400, 300);
+        brandOptionsDialog.setLocationRelativeTo(null);
+        brandOptionsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        brandOptionsDialog.setModal(true); // Set dialog as modal to prevent user interaction
+        brandOptionsDialog.setVisible(true);
+
+
+    }
+
+    private JDialog createBrandOptionsDialog(String brandName) {
+        JDialog brandOptionsDialog = new JDialog();
+        brandOptionsDialog.setTitle("Brand Options: " + brandName);
+        return brandOptionsDialog;
+    }
+
+    private JPanel createBrandOptionsPanel() {
+        JPanel brandOptionsPanel = new JPanel();
+        brandOptionsPanel.setLayout(new GridLayout(0, 1));
+        return brandOptionsPanel;
+    }
 
 }
 
