@@ -6,10 +6,7 @@ import Src.Product;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,6 +14,7 @@ import java.util.ArrayList;
 public class HomeFrame extends JFrame {
     private static String username;
     private String password;
+    private List<String> favorites = new ArrayList<>();
 
 
     public HomeFrame(String username) {
@@ -119,6 +117,8 @@ public class HomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle the Favorites button click
+                // show favorited brands
+                showFavorites();
                 System.out.println("Favorites button clicked");
             }
         });
@@ -270,14 +270,25 @@ public class HomeFrame extends JFrame {
         DefaultTableModel tableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells uneditable
+                return column == 1; // Make only the second column editable
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 1) {
+                    return Boolean.class; // Set the class of the second column to Boolean (checkbox)
+                }
+                return super.getColumnClass(columnIndex);
             }
         };
         tableModel.addColumn("Brand Name");
+        tableModel.addColumn("Mark Favorite");
+        tableModel.addColumn("Category");
+        tableModel.addColumn("Country");
 
         // Add the available brands to the table model
         for (Brand brand : availableBrands) {
-            tableModel.addRow(new Object[]{brand.getName()});
+            tableModel.addRow(new Object[]{brand.getName(), false, brand.getCategory(), brand.getCountryOfOrigin()});
         }
 
         // Create a JTable with the custom table model
@@ -300,19 +311,49 @@ public class HomeFrame extends JFrame {
         getContentPane().revalidate();
         getContentPane().repaint();
 
+        // Add a listener to the table
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = table.getSelectedRow();
-                if (selectedRow >= 0) {
+                int selectedColumn = table.getSelectedColumn();
+                if (selectedRow >= 0 && selectedColumn == 0) { // Check if the selected column is 0 (first column)
                     String brandName = (String) table.getValueAt(selectedRow, 0);
                     showBrandOptions(brandName);
                 }
             }
         });
 
+        // Add a checkbox column to the table
+        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JCheckBox()) {
+            @Override
+            public Object getCellEditorValue() {
+                int selectedRow = table.getSelectedRow();
+                String brandName = (String) table.getValueAt(selectedRow, 0);
+                Boolean isFavorite = (Boolean) super.getCellEditorValue();
+                if (isFavorite) {
+                    addToFavorites(brandName);
+                } else {
+                    removeFromFavorites(brandName);
+                }
+                return super.getCellEditorValue();
+            }
+        });
     }
 
+    private void addToFavorites(String brandName) {
+        if (!favorites.contains(brandName)) {
+            favorites.add(brandName);
+            System.out.println("Added '" + brandName + "' to favorites.");
+        }
+    }
+
+    private void removeFromFavorites(String brandName) {
+        if (favorites.contains(brandName)) {
+            favorites.remove(brandName);
+            System.out.println("Removed '" + brandName + "' from favorites.");
+        }
+    }
 
     private void showBrandOptions(String brandName) {
         JDialog brandOptionsDialog = createBrandOptionsDialog(brandName);
@@ -401,6 +442,55 @@ public class HomeFrame extends JFrame {
         brandOptionsPanel.setLayout(new GridLayout(0, 1));
         return brandOptionsPanel;
     }
+
+    private void showFavorites() {
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<String> favorites = getFavorites(); // Use the instance method
+
+        // Create a custom table model to hold the favorited brands
+        DefaultTableModel tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells uneditable
+            }
+        };
+        tableModel.addColumn("Favorited Brands");
+
+        // Add the favorited brands to the table model
+        for (String brand : favorites) {
+            tableModel.addRow(new Object[]{brand});
+        }
+
+        // Create a JTable with the custom table model
+        JTable table = new JTable(tableModel);
+
+        // Set table appearance and behavior
+        table.setRowHeight(30); // Set the row height
+        table.getTableHeader().setFont(new Font("garamond", Font.BOLD, 20)); // Set the header font
+        table.setFont(new Font("garamond", Font.PLAIN, 20)); // Set the cell font
+        table.setBackground(Color.lightGray);
+
+        // Create a scroll pane and add the table to it
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Create a dialog to display the favorites
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Favorites");
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.getContentPane().add(scrollPane);
+
+        // Set dialog size and visibility
+        dialog.pack();
+        dialog.setLocationRelativeTo(null); // Center the dialog on the screen
+        dialog.setModal(true); // Make the dialog modal
+
+        // Show the dialog
+        dialog.setVisible(true);
+    }
+    private List<String> getFavorites() {
+        return favorites;
+    }
+
 
 }
 
