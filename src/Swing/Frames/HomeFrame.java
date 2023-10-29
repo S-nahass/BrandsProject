@@ -17,8 +17,6 @@ public class HomeFrame extends JFrame {
     private String password;
 
 
-
-
     public HomeFrame(String username) {
         this.username = username;
         this.password = username;
@@ -109,6 +107,8 @@ public class HomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle the Brands button click
+                // Show List of Brands
+                viewAvailableBrands();
                 System.out.println("Brands button clicked");
             }
         });
@@ -258,6 +258,45 @@ public class HomeFrame extends JFrame {
             new LoginFrame();
             System.out.println("Logout selected");
         }
+    }
+
+    private void viewAvailableBrands() {
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<Brand> availableBrands = brandDatabase.getBrands(); // Use the instance method
+
+        // Create a custom table model to hold the available brands
+        DefaultTableModel tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells uneditable
+            }
+        };
+        tableModel.addColumn("Brand Name");
+
+        // Add the available brands to the table model
+        for (Brand brand : availableBrands) {
+            tableModel.addRow(new Object[]{brand.getName()});
+        }
+
+        // Create a JTable with the custom table model
+        JTable table = new JTable(tableModel);
+
+        // Set table appearance and behavior
+        table.setRowHeight(30); // Set the row height
+        table.getTableHeader().setFont(new Font("garamond", Font.BOLD, 20)); // Set the header font
+        table.setFont(new Font("garamond", Font.PLAIN, 20)); // Set the cell font
+        table.setBackground(Color.lightGray);
+
+        // Create a scroll pane and add the table to it
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Remove any existing components in the contentPanel
+        this.getContentPane();
+
+        // Add the scrollPane with the table to the contentPanel
+        this.getContentPane().add(scrollPane, BorderLayout.CENTER);
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
     }
 
 
