@@ -4,6 +4,7 @@ import Src.BrandDatabase;
 import Src.Product;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -296,7 +297,7 @@ public class HomeFrame extends JFrame {
 
         // Set table appearance and behavior
         table.setRowHeight(30); // Set the row height
-        table.getTableHeader().setFont(new Font("garamond", Font.BOLD, 20)); // Set the header font
+        table.getTableHeader().setFont(new Font("garamond", Font.BOLD, 15)); // Set the header font
         table.setFont(new Font("garamond", Font.PLAIN, 20)); // Set the cell font
         table.setBackground(Color.lightGray);
 
@@ -339,6 +340,7 @@ public class HomeFrame extends JFrame {
                 return super.getCellEditorValue();
             }
         });
+
     }
 
     private void addToFavorites(String brandName) {
@@ -362,7 +364,6 @@ public class HomeFrame extends JFrame {
         // Create buttons for brand options
         JButton seeBrandDetailsButton = new JButton("See Brand Details");
         JButton seeProductsButton = new JButton("See Products");
-        JButton markAsFavoriteButton = new JButton("Mark as Favorite");
         JButton leaveBrandReviewButton = new JButton("Leave Brand Review");
         JButton seeBrandReviewsButton = new JButton("See Brand Reviews");
 
@@ -375,9 +376,6 @@ public class HomeFrame extends JFrame {
 
         seeProductsButton.setFont(buttonFont);
         seeProductsButton.setBackground(buttonColor);
-
-        markAsFavoriteButton.setFont(buttonFont);
-        markAsFavoriteButton.setBackground(buttonColor);
 
         leaveBrandReviewButton.setFont(buttonFont);
         leaveBrandReviewButton.setBackground(buttonColor);
