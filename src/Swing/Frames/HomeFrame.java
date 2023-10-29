@@ -362,7 +362,7 @@ public class HomeFrame extends JFrame {
         JPanel brandOptionsPanel = createBrandOptionsPanel();
 
         // Create buttons for brand options
-        JButton seeBrandDetailsButton = new JButton("See Brand Details");
+        JButton seeBrandDetailsButton = new JButton("See More Brand Details");
         JButton seeProductsButton = new JButton("See Products");
         JButton leaveBrandReviewButton = new JButton("Leave Brand Review");
         JButton seeBrandReviewsButton = new JButton("See Brand Reviews");
@@ -386,7 +386,9 @@ public class HomeFrame extends JFrame {
         // Add action listeners to the buttons to handle user interactions
         seeBrandDetailsButton.addActionListener(e -> {
             // Handle "See Brand Details" button click
-            System.out.println("See Brand Details clicked");
+            brandOptionsDialog.dispose();
+            String selectedBrandName = brandName;
+            viewBrandDetails(selectedBrandName);
         });
 
         seeProductsButton.addActionListener(e -> {
@@ -487,9 +489,54 @@ public class HomeFrame extends JFrame {
     private List<String> getFavorites() {
         return favorites;
     }
+    private void viewBrandDetails(String brandName) {
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<Brand> brands = brandDatabase.getBrands(); // Use the instance method
 
+        Brand selectedBrand = null;
 
-}
+        // Find the brand with the matching name
+        for (Brand brand : brands) {
+            if (brand.getName().equals(brandName)) {
+                selectedBrand = brand;
+                break; // Stop searching once the brand is found
+            }
+        }
+
+        if (selectedBrand != null) {
+            // Create a modal dialog to display brand details
+            JDialog brandDetailsDialog = new JDialog((Frame) null, "Brand Details: " + brandName, true);
+            brandDetailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            // Create a panel to hold brand details
+            JPanel brandDetailsPanel = new JPanel();
+            brandDetailsPanel.setLayout(new BorderLayout());
+
+            // Create labels to display brand information
+            Font labelFont = new Font("Garamond", Font.PLAIN, 20); // Adjust the font and sizing here
+
+            JLabel yearLabel = new JLabel("Year of Origin: " + selectedBrand.getYearFounded());
+            yearLabel.setFont(labelFont); // Apply the font to the label
+
+            JLabel historyLabel = new JLabel("Brand History: " + selectedBrand.getBrandHistory());
+            historyLabel.setFont(labelFont); // Apply the font to the label
+
+            // Add labels to the brand details panel
+            brandDetailsPanel.add(yearLabel, BorderLayout.NORTH);
+            brandDetailsPanel.add(historyLabel, BorderLayout.CENTER);
+
+            // Add the brand details panel to the dialog
+            brandDetailsDialog.add(brandDetailsPanel);
+
+            // Set dialog properties and make it visible
+            brandDetailsDialog.pack();
+            brandDetailsDialog.setLocationRelativeTo(null);
+            brandDetailsDialog.setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Brand not found: " + brandName, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }}
 
 
 
