@@ -461,6 +461,11 @@ public class HomeFrame extends JFrame {
             tableModel.addRow(new Object[]{brand});
         }
 
+        // check if the table is empty
+        if (tableModel.getRowCount() == 0) {
+            tableModel.addRow(new Object[]{"No brands favorited yet."});
+        }
+
         // Create a JTable with the custom table model
         JTable table = new JTable(tableModel);
 
