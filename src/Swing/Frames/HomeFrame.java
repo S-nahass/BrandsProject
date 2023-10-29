@@ -184,9 +184,17 @@ public class HomeFrame extends JFrame {
             }
         }
 
+        if (searchResults.isEmpty()) {
+            UIManager.put("OptionPane.messageFont", new Font("garamond", Font.BOLD, 15));
+            UIManager.put("OptionPane.messageForeground", Color.black);
+            UIManager.put("OptionPane.buttonFont", new Font("garamond", Font.BOLD, 15));
+            UIManager.put("OptionPane.buttonForeground", Color.black);
+            // No results were found
+            JOptionPane.showMessageDialog(null, "No results found", "Search Results", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         return searchResults;
     }
-
     private void showBrandSearchResults(List<Brand> searchResults) {
         // Create a custom table model to hold the search results
         DefaultTableModel tableModel = new DefaultTableModel() {
