@@ -82,6 +82,14 @@ public class Brand {
     public void addUserReview(UserReview userReview) {
         brandReviews.add(userReview);
     }
+
+
+
+    // for GUI results display
+    @Override
+    public String toString() {
+        return name;
+    }
 }
 
 

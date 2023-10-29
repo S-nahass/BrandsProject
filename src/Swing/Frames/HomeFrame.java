@@ -4,6 +4,7 @@ import Src.BrandDatabase;
 import Src.Product;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -161,15 +162,11 @@ public class HomeFrame extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String searchText = searchField.getText();
-                String results = performBrandSearch(searchText).toString();
-                JTextArea resultsArea = new JTextArea(results, 10, 30);
-                resultsArea.setWrapStyleWord(true);
-                resultsArea.setLineWrap(true);
-                resultsArea.setEditable(false);
-                JScrollPane scrollPane = new JScrollPane(resultsArea);
-                frame.add(scrollPane, BorderLayout.CENTER);
-                frame.revalidate();
+                String searchTerm = searchField.getText();
+                if (searchTerm != null && !searchTerm.isEmpty()) {
+                    List<Brand> searchResults = performBrandSearch(searchTerm);
+                    showBrandSearchResults(searchResults);
+                }
             }
         });
 
@@ -189,20 +186,41 @@ public class HomeFrame extends JFrame {
 
         return searchResults;
     }
-    private void showBrandSearchResults(List<Brand> searchResults) {
-        // Create a panel to display search results
-        JPanel resultsPanel = new JPanel();
-        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
 
+    private void showBrandSearchResults(List<Brand> searchResults) {
+        // Create a custom table model to hold the search results
+        DefaultTableModel tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells uneditable
+            }
+        };
+        tableModel.addColumn("Brand Name");
+
+        // Add the search results to the table model
         for (Brand brand : searchResults) {
-            JLabel label = new JLabel(brand.getName());
-            resultsPanel.add(label);
+            tableModel.addRow(new Object[] { brand.getName() });
         }
 
+        // Create a JTable with the custom table model
+        JTable table = new JTable(tableModel);
+
+        // Set table appearance and behavior
+        table.setRowHeight(30); // Set the row height
+        table.getTableHeader().setFont(new Font("garamond", Font.BOLD, 20)); // Set the header font
+        table.setFont(new Font("garamond", Font.PLAIN, 20)); // Set the cell font
+
+        // Create a scroll pane and add the table to it
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Add the scroll pane to the results panel
+        JPanel resultsPanel = new JPanel(new BorderLayout());
+        resultsPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Add the results panel to the frame
+        getContentPane().add(resultsPanel, BorderLayout.CENTER);
+        revalidate(); // Refresh the UI to show the added results panel
     }
-
-
-
 
     private void showProfileOptions() {
         UIManager.put("OptionPane.messageFont", new Font("garamond", Font.BOLD, 15));
