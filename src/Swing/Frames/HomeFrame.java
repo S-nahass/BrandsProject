@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -386,19 +387,19 @@ public class HomeFrame extends JFrame {
         // Add action listeners to the buttons to handle user interactions
         seeBrandDetailsButton.addActionListener(e -> {
             // Handle "See Brand Details" button click
-            brandOptionsDialog.dispose();
             String selectedBrandName = brandName;
             viewBrandDetails(selectedBrandName);
         });
 
         seeProductsButton.addActionListener(e -> {
             // Handle "See Products" button click
-            System.out.println("See Products clicked");
+
         });
 
         leaveBrandReviewButton.addActionListener(e -> {
             // Handle "Leave Brand Review" button click
-            System.out.println("Leave Brand Review clicked");
+            String selectedBrandName = brandName;
+            leaveBrandReview(selectedBrandName);
         });
 
         seeBrandReviewsButton.addActionListener(e -> {
@@ -536,7 +537,100 @@ public class HomeFrame extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Brand not found: " + brandName, "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }}
+    }
+
+    private void leaveBrandReview(String brandName) {
+        // Create a dialog to collect review input
+        JDialog reviewDialog = new JDialog(this, "Leave a Review for " + brandName, true);
+        reviewDialog.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
+        reviewDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        reviewDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); // Set modality type to prevent interaction with other windows
+
+        // Create a panel to hold review input components
+        JPanel reviewPanel = new JPanel();
+        reviewPanel.setBackground(Color.WHITE); // Set background color to white
+        reviewPanel.setLayout(new GridLayout(0, 1));
+
+        // Create a text area for the user to input their review
+        JTextArea reviewTextArea = new JTextArea(5, 30);
+        reviewTextArea.setLineWrap(true);
+        reviewTextArea.setWrapStyleWord(true);
+        reviewTextArea.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
+        reviewTextArea.setForeground(Color.BLACK); // Set text color to black
+        reviewTextArea.setBackground(new Color(230, 230, 230)); // Set background color to light gray
+
+        // Create a rating scale using radio buttons
+        JPanel ratingPanel = new JPanel();
+        ratingPanel.setBackground(Color.WHITE); // Set background color to white
+        ratingPanel.setLayout(new FlowLayout());
+
+        JLabel ratingLabel = new JLabel("Rating: ");
+        ratingLabel.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
+        ratingLabel.setForeground(Color.BLACK); // Set text color to black
+        ratingPanel.add(ratingLabel);
+
+        ButtonGroup ratingGroup = new ButtonGroup();
+
+        for (int i = 1; i <= 5; i++) {
+            JRadioButton radioButton = new JRadioButton(String.valueOf(i));
+            radioButton.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
+            radioButton.setForeground(Color.BLACK); // Set text color to black
+            radioButton.setBackground(Color.WHITE); // Set background color to white
+            ratingGroup.add(radioButton);
+            ratingPanel.add(radioButton);
+        }
+
+        // Create a "Submit" button to submit the review
+        JButton submitButton = new JButton("Submit");
+        submitButton.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
+        submitButton.setForeground(Color.WHITE); // Set text color to white
+        submitButton.setBackground(Color.darkGray); // Set background color to blue
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String userReview = reviewTextArea.getText();
+                int userRating = 0;
+
+                // Get the selected rating value from the radio buttons
+                for (Enumeration<AbstractButton> buttons = ratingGroup.getElements(); buttons.hasMoreElements();) {
+                    AbstractButton button = buttons.nextElement();
+
+                    if (button.isSelected()) {
+                        userRating = Integer.parseInt(button.getText());
+                        break;
+                    }
+                }
+
+                // You can save the review and rating data to your Brand or BrandDatabase class
+                // Implement your data saving logic here
+                System.out.println("Review submitted: " + userReview);
+                System.out.println("Rating submitted: " + userRating);
+                reviewDialog.dispose();
+            }
+        });
+
+        // Add components to the review panel
+        // Create a "Your Review" label with a custom font
+        JLabel reviewLabel = new JLabel("Your Review:");
+        reviewLabel.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
+        reviewLabel.setForeground(Color.BLACK); // Set text color to black
+
+        reviewPanel.add(reviewLabel);
+        reviewPanel.add(reviewTextArea);
+        reviewPanel.add(ratingPanel);
+        reviewPanel.add(submitButton);
+
+        // Add the review panel to the dialog
+        reviewDialog.add(reviewPanel);
+
+        // Set dialog properties and make it visible
+        reviewDialog.pack();
+        reviewDialog.setLocationRelativeTo(null); // Center the dialog in the middle of the screen
+        reviewDialog.setVisible(true);
+    }
+
+}
+
 
 
 
