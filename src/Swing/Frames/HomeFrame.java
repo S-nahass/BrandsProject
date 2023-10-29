@@ -293,12 +293,12 @@ public class HomeFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Remove any existing components in the contentPanel
-        this.getContentPane().removeAll();
+        getContentPane().remove(0);
 
         // Add the scrollPane with the table to the contentPanel
-        this.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        this.getContentPane().revalidate();
-        this.getContentPane().repaint();
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+        getContentPane().revalidate();
+        getContentPane().repaint();
 
         table.addMouseListener(new MouseAdapter() {
             @Override
