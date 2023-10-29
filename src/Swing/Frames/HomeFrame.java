@@ -394,11 +394,6 @@ public class HomeFrame extends JFrame {
             System.out.println("See Products clicked");
         });
 
-        markAsFavoriteButton.addActionListener(e -> {
-            // Handle "Mark as Favorite" button click
-            System.out.println("Mark as Favorite clicked");
-        });
-
         leaveBrandReviewButton.addActionListener(e -> {
             // Handle "Leave Brand Review" button click
             System.out.println("Leave Brand Review clicked");
@@ -412,7 +407,6 @@ public class HomeFrame extends JFrame {
         // Add the buttons to the brand options panel
         brandOptionsPanel.add(seeBrandDetailsButton);
         brandOptionsPanel.add(seeProductsButton);
-        brandOptionsPanel.add(markAsFavoriteButton);
         brandOptionsPanel.add(leaveBrandReviewButton);
         brandOptionsPanel.add(seeBrandReviewsButton);
 
