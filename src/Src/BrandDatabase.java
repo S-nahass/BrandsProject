@@ -185,6 +185,7 @@ public class BrandDatabase {
 
 
     public static List<Brand> getBrands() {
+
         return brands;
     }
 

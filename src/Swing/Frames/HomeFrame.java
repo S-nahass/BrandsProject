@@ -1,20 +1,20 @@
 package Swing.Frames;
 import Src.Brand;
-
+import Src.BrandDatabase;
+import Src.Product;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
-
+import java.util.ArrayList;
 
 
 public class HomeFrame extends JFrame {
     private static String username;
     private String password;
-    private List<Brand> brands;
+
 
 
 
@@ -124,6 +124,7 @@ public class HomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle the Profile button click
+                showProfileOptions();
                 System.out.println("Profile button clicked");
             }
         });
@@ -139,7 +140,7 @@ public class HomeFrame extends JFrame {
     }
 
     // Method to create the search bar
-    public static JPanel createSearchBar(JFrame frame) {
+    public JPanel createSearchBar(JFrame frame) {
         JPanel searchBar = new JPanel();
         searchBar.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
@@ -161,7 +162,7 @@ public class HomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                String results = performBrandSearch(searchText);
+                String results = performBrandSearch(searchText).toString();
                 JTextArea resultsArea = new JTextArea(results, 10, 30);
                 resultsArea.setWrapStyleWord(true);
                 resultsArea.setLineWrap(true);
@@ -175,10 +176,66 @@ public class HomeFrame extends JFrame {
         return searchBar;
     }
 
-    public static String performBrandSearch(String searchText) {
+    private List<Brand> performBrandSearch(String searchTerm) {
+        List<Brand> searchResults = new ArrayList<>();
+        BrandDatabase brandDatabase = new BrandDatabase();
 
-        return "";
+        // Simulate a brand search using your existing data
+        for (Brand brand : BrandDatabase.getBrands()) {
+            if (brand.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
+                searchResults.add(brand);
+            }
+        }
+
+        return searchResults;
     }
+    private void showBrandSearchResults(List<Brand> searchResults) {
+        // Create a panel to display search results
+        JPanel resultsPanel = new JPanel();
+        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
+
+        for (Brand brand : searchResults) {
+            JLabel label = new JLabel(brand.getName());
+            resultsPanel.add(label);
+        }
+
+    }
+
+
+
+
+    private void showProfileOptions() {
+        UIManager.put("OptionPane.messageFont", new Font("garamond", Font.BOLD, 15));
+        UIManager.put("OptionPane.messageForeground", Color.black);
+        UIManager.put("OptionPane.buttonFont", new Font("garamond", Font.BOLD, 15));
+        UIManager.put("OptionPane.buttonForeground", Color.black);
+
+        String[] options = {"View Purchases", "Logout"};
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Choose an option:",
+                "Profile Options",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        if (choice == 0) {
+            // View Purchases option is selected
+            // Add code to handle "View Purchases" action
+            System.out.println("View Purchases selected");
+        } else if (choice == 1) {
+            // Logout option user and send him back to previous frame
+            this.dispose();
+            new LoginFrame();
+            System.out.println("Logout selected");
+        }
+    }
+
+
+
 
 }
 
