@@ -200,6 +200,9 @@ public class HomeFrame extends JFrame {
         return searchResults;
     }
     private void showBrandSearchResults(List<Brand> searchResults) {
+        // Remove previous content from the frame
+        getContentPane().removeAll();
+
         // Create a custom table model to hold the search results
         DefaultTableModel tableModel = new DefaultTableModel() {
             @Override
@@ -231,9 +234,18 @@ public class HomeFrame extends JFrame {
 
         // Add the results panel to the frame
         getContentPane().add(resultsPanel, BorderLayout.CENTER);
-        revalidate(); // Refresh the UI to show the added results panel
-    }
 
+        // Create menu
+        JPanel bottomMenu = createBottomMenu();
+        // Add the bottom menu to the frame
+        add(bottomMenu, BorderLayout.SOUTH);
+        // Create the search bar using a method
+        JPanel searchBar = createSearchBar(this);
+        add(searchBar, BorderLayout.NORTH);
+
+        revalidate(); // Refresh the UI to show the added results panel
+
+    }
     private void showProfileOptions() {
         UIManager.put("OptionPane.messageFont", new Font("garamond", Font.BOLD, 15));
         UIManager.put("OptionPane.messageForeground", Color.black);
@@ -265,6 +277,8 @@ public class HomeFrame extends JFrame {
     }
 
     private void viewAvailableBrands() {
+        // Remove previous content from the frame
+
         BrandDatabase brandDatabase = new BrandDatabase();
         List<Brand> availableBrands = brandDatabase.getBrands(); // Use the instance method
 
@@ -306,7 +320,15 @@ public class HomeFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Remove any existing components in the contentPanel
-        getContentPane().remove(0);
+        getContentPane().removeAll();
+
+        // Create menu
+        JPanel bottomMenu = createBottomMenu();
+        // Add the bottom menu to the frame
+        add(bottomMenu, BorderLayout.SOUTH);
+        // Create the search bar using a method
+        JPanel searchBar = createSearchBar(this);
+        add(searchBar, BorderLayout.NORTH);
 
         // Add the scrollPane with the table to the contentPanel
         getContentPane().add(scrollPane, BorderLayout.CENTER);
