@@ -12,6 +12,22 @@ public class BrandDatabase {
         performanceDataList = new ArrayList<>();
         initializeTestData();
         initializeBrandPerformanceTestData();
+        initializeTestUserReviews();
+
+
+    }
+
+    private void initializeTestUserReviews() {
+        for (Brand brand : brands) {
+            // Create test user reviews and add them to the brand
+            UserReview review1 = new UserReview("User1", brand, 5, "Great brand!");
+            UserReview review2 = new UserReview("User2", brand, 4, "Love their products.");
+            UserReview review3 = new UserReview("User3", brand, 3, "Not bad.");
+
+            brand.addUserReview(review1);
+            brand.addUserReview(review2);
+            brand.addUserReview(review3);
+        }
 
     }
 

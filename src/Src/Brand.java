@@ -12,6 +12,7 @@ public class Brand {
     //  private List<UserFeedback> feedback;
     private List<UserReview> brandReviews;
 
+
     private String brandHistory;
 
     public Brand(String name, String category, int yearFounded, String countryOfOrigin, String brandHistory) {
@@ -81,6 +82,41 @@ public class Brand {
 
     public void addUserReview(UserReview userReview) {
         brandReviews.add(userReview);
+    }
+
+    public List<UserReview> getReviews() {
+        return brandReviews;
+    }
+
+    // get user review
+    public List<String> getReviewText() {
+        List<String> userReviews = new ArrayList<>();
+        for (UserReview userReview : brandReviews) {
+            userReviews.add(userReview.getContent());
+        }
+
+        return userReviews;
+    }
+
+    // get brand rating
+    public List<Integer> getRating() {
+
+        List<Integer> userRatings = new ArrayList<>();
+        for (UserReview userReview : brandReviews) {
+            userRatings.add(userReview.getRating());
+        }
+
+        return userRatings;
+    }
+
+    // get username for brand review
+    public List<String> getUserName() {
+        List<String> userNames = new ArrayList<>();
+        for (UserReview userReview : brandReviews) {
+            userNames.add(userReview.getUserName());
+        }
+
+        return userNames;
     }
 
 

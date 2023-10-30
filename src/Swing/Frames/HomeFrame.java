@@ -1,6 +1,7 @@
 package Swing.Frames;
 import Src.Brand;
 import Src.BrandDatabase;
+import Src.UserReview;
 import Src.Product;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ public class HomeFrame extends JFrame {
     private static String username;
     private String password;
     private List<String> favorites = new ArrayList<>();
+    private List<Brand> brands; // Assuming you have a list of Brand objects
+    private List<UserReview> userReviews = new ArrayList<>();
 
 
     public HomeFrame(String username) {
@@ -207,14 +210,17 @@ public class HomeFrame extends JFrame {
         DefaultTableModel tableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells uneditable
+                return column == 1; // Only the checkbox column is editable
             }
         };
         tableModel.addColumn("Brand Name");
+        tableModel.addColumn("Mark Favorite");
+        tableModel.addColumn("Category");
+        tableModel.addColumn("Country");
 
         // Add the search results to the table model
         for (Brand brand : searchResults) {
-            tableModel.addRow(new Object[] { brand.getName() });
+            tableModel.addRow(new Object[]{brand.getName(), false, brand.getCategory(), brand.getCountryOfOrigin()});
         }
 
         // Create a JTable with the custom table model
@@ -245,8 +251,35 @@ public class HomeFrame extends JFrame {
 
         revalidate(); // Refresh the UI to show the added results panel
 
-    }
-    private void showProfileOptions() {
+        // Add a checkbox column to the table
+        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JCheckBox()) {
+            @Override
+            public Object getCellEditorValue() {
+                int selectedRow = table.getSelectedRow();
+                String brandName = (String) table.getValueAt(selectedRow, 0);
+                Boolean isFavorite = (Boolean) super.getCellEditorValue();
+                if (isFavorite) {
+                    addToFavorites(brandName);
+                } else {
+                    removeFromFavorites(brandName);
+                }
+                return super.getCellEditorValue();
+            }
+        });
+
+        // Add a listener to the table
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = table.getSelectedRow();
+                int selectedColumn = table.getSelectedColumn();
+                if (selectedRow >= 0 && selectedColumn == 0) { // Check if the selected column is 0 (first column)
+                    String brandName = (String) table.getValueAt(selectedRow, 0);
+                    showBrandOptions(brandName);
+                }
+            }
+        });
+    }private void showProfileOptions() {
         UIManager.put("OptionPane.messageFont", new Font("garamond", Font.BOLD, 15));
         UIManager.put("OptionPane.messageForeground", Color.black);
         UIManager.put("OptionPane.buttonFont", new Font("garamond", Font.BOLD, 15));
@@ -267,7 +300,7 @@ public class HomeFrame extends JFrame {
         if (choice == 0) {
             // View Purchases option is selected
             // Add code to handle "View Purchases" action
-            System.out.println("View Purchases selected");
+            viewPurchases();
         } else if (choice == 1) {
             // Logout option user and send him back to previous frame
             this.dispose();
@@ -297,7 +330,7 @@ public class HomeFrame extends JFrame {
                 return super.getColumnClass(columnIndex);
             }
         };
-        tableModel.addColumn("Brand Name");
+        tableModel.addColumn("Brand Name(click for details)");
         tableModel.addColumn("Mark Favorite");
         tableModel.addColumn("Category");
         tableModel.addColumn("Country");
@@ -415,8 +448,11 @@ public class HomeFrame extends JFrame {
 
         seeProductsButton.addActionListener(e -> {
             // Handle "See Products" button click
+            String selectedBrandName = brandName;
+            showProducts(selectedBrandName); // Pass in the brandName
 
         });
+
 
         leaveBrandReviewButton.addActionListener(e -> {
             // Handle "Leave Brand Review" button click
@@ -425,9 +461,10 @@ public class HomeFrame extends JFrame {
         });
 
         seeBrandReviewsButton.addActionListener(e -> {
-            // Handle "See Brand Reviews" button click
-            System.out.println("See Brand Reviews clicked");
+            // Handle "See Products" button click
+
         });
+
 
         // Add the buttons to the brand options panel
         brandOptionsPanel.add(seeBrandDetailsButton);
@@ -579,7 +616,7 @@ public class HomeFrame extends JFrame {
         reviewTextArea.setWrapStyleWord(true);
         reviewTextArea.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
         reviewTextArea.setForeground(Color.BLACK); // Set text color to black
-        reviewTextArea.setBackground(new Color(230, 230, 230)); // Set background color to light gray
+        reviewTextArea.setBackground(new Color(210, 203, 203)); // Set background color to light gray
 
         // Create a rating scale using radio buttons
         JPanel ratingPanel = new JPanel();
@@ -651,7 +688,192 @@ public class HomeFrame extends JFrame {
         reviewDialog.setVisible(true);
     }
 
+
+    private void showProducts(String brandName) {
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<Brand> brands = brandDatabase.getBrands(); // Use the instance method
+
+        Brand selectedBrand = null;
+
+        // Find the brand with the matching name
+        for (Brand brand : brands) {
+            if (brand.getName().equals(brandName)) {
+                selectedBrand = brand;
+                break; // Stop searching once the brand is found
+            }
+        }
+
+        if (selectedBrand != null) {
+            // Create a modal dialog to display the products of the selected brand
+            JDialog productsDialog = new JDialog((Frame) null, "Products of " + brandName, true);
+            productsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            // Create a panel to hold the list of products
+            JPanel productsPanel = new JPanel();
+            productsPanel.setLayout(new BorderLayout());
+
+            // Create a label to prompt the user
+            JLabel promptLabel = new JLabel("Click on a product to purchase");
+
+            // Create a list to display the products of the selected brand
+            JList<Product> productsList = new JList<>(selectedBrand.getProducts().toArray(new Product[0]));
+
+            // Set a custom renderer for the list to display the product name and price
+            productsList.setCellRenderer(new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                              boolean isSelected, boolean cellHasFocus) {
+                    Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    if (value instanceof Product) {
+                        Product product = (Product) value;
+                        setText(product.getName() + " - Price: $" + product.getPrice());
+                    }
+                    return component;
+                }
+            });
+
+            // Add a selection listener to the list to handle the purchase action
+            productsList.addListSelectionListener(e -> {
+                Product selectedProduct = productsList.getSelectedValue();
+                if (selectedProduct != null) {
+                    JOptionPane.showMessageDialog(productsDialog, "You have purchased: "
+                                    + selectedProduct.getName() + " - Price: $" + selectedProduct.getPrice(), "Purchase",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+
+            // Set the preferred size of the list to match the size of the frame
+            productsList.setPreferredSize(new Dimension(500, 250));
+
+            productsPanel.add(promptLabel, BorderLayout.NORTH);
+            productsPanel.add(new JScrollPane(productsList), BorderLayout.CENTER);
+
+            // Add the products panel to the dialog
+            productsDialog.add(productsPanel);
+
+            // Set dialog properties and make it visible
+            productsDialog.pack();
+            productsDialog.setLocationRelativeTo(null);
+            productsDialog.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Brand not found: " + brandName, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+private void purchaseProducts(String brandName) {
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<Brand> brands = brandDatabase.getBrands(); // Use the instance method
+
+        Brand selectedBrand = null;
+
+        // Find the brand with the matching name
+        for (Brand brand : brands) {
+            if (brand.getName().equals(brandName)) {
+                selectedBrand = brand;
+                break; // Stop searching once the brand is found
+            }
+        }
+
+        if (selectedBrand != null) {
+            // Create a modal dialog to allow the user to purchase products
+            JDialog purchaseDialog = new JDialog((Frame) null, "Purchase Products of " + brandName, true);
+            purchaseDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            // Create a panel to hold the purchase options
+            JPanel purchasePanel = new JPanel();
+            purchasePanel.setLayout(new BorderLayout());
+
+            // Create a combo box to select a product for purchase
+            JComboBox<String> productComboBox = new JComboBox<>();
+
+            // Populate the combo box with the names of the products of the selected brand
+            for (Product product : selectedBrand.getProducts()) {
+                productComboBox.addItem(product.getName());
+            }
+
+            // Create a button to initiate the purchase
+            JButton purchaseButton = new JButton("Purchase");
+
+            // Add components to the purchase panel
+            purchasePanel.add(new JLabel("Select a product to purchase:"), BorderLayout.NORTH);
+            purchasePanel.add(productComboBox, BorderLayout.CENTER);
+            purchasePanel.add(purchaseButton, BorderLayout.SOUTH);
+
+            // Add the purchase panel to the dialog
+            purchaseDialog.add(purchasePanel);
+
+            // Set dialog properties and make it visible
+            purchaseDialog.pack();
+            purchaseDialog.setLocationRelativeTo(null);
+            purchaseDialog.setVisible(true);
+
+            // Define the action to perform when the purchase button is clicked
+            purchaseButton.addActionListener(e -> {
+                String selectedProduct = (String) productComboBox.getSelectedItem();
+                if (selectedProduct != null) {
+                    // Handle the purchase logic here, e.g., add the selected product to a cart
+                    // You can also update the stock or perform other actions
+                    // You may want to create a cart or transaction object to keep track of purchases.
+                    System.out.println("Purchased product: " + selectedProduct);
+                }
+            });
+        } else {
+            JOptionPane.showMessageDialog(this, "Brand not found: " + brandName, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void viewPurchases() {
+        // Assuming you have a list of the user's purchases
+        List<String> userPurchases = getUserPurchases();
+
+        // Create a dialog to display the user's purchases
+        JDialog purchasesDialog = new JDialog((Frame) null, "Your Purchases", true);
+        purchasesDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // Create a panel to hold the list of purchases
+        JPanel purchasesPanel = new JPanel();
+        purchasesPanel.setLayout(new BorderLayout());
+
+        // Create a label to display user purchases
+        JTextArea purchasesTextArea = new JTextArea();
+        purchasesTextArea.setEditable(false);
+
+        // Append purchases to the text area
+        for (String purchase : userPurchases) {
+            purchasesTextArea.append(purchase + "\n");
+        }
+
+        JScrollPane scrollPane = new JScrollPane(purchasesTextArea);
+        purchasesPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Add the purchases panel to the dialog
+        purchasesDialog.add(purchasesPanel);
+
+        // Set dialog properties and make it visible
+        purchasesDialog.pack();
+        purchasesDialog.setLocationRelativeTo(null); // Center the dialog in the middle of the screen
+        purchasesDialog.setVisible(true);
+    }
+
+    private List<String> getUserPurchases() {
+        // Simulate retrieving the user's purchase data
+        List<String> purchases = new ArrayList<>();
+
+        // Add some example purchase records
+        purchases.add("Product: Running Shoes - Price: $99.99");
+        purchases.add("Product: T-Shirt - Price: $29.99");
+        purchases.add("Product: Jeans - Price: $49.99");
+        purchases.add("Product: Sunglasses - Price: $79.99");
+
+        return purchases;
+    }
+
+
+
 }
+
+
+
+
 
 
 

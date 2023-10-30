@@ -1,10 +1,13 @@
 package Src;
 
+import java.util.List;
+
 public class UserReview {
     private String userName;
     private Product product;
     private int rating;
     private String content;
+    private static List<UserReview> userReviews;
 
     public UserReview(String userName, Product product, int rating, String content) {
         this.userName = userName;
@@ -37,6 +40,9 @@ public class UserReview {
         return content;
     }
 
+    public static List<UserReview> getUserReviews() {
+        return  userReviews;
+    }
 
     @Override
     public String toString() {
