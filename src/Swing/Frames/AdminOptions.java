@@ -103,6 +103,7 @@ public class AdminOptions extends JFrame {
                 break;
             case 3:
                 // Add Product to Brand - Implement code for adding a product to a brand
+                addProductToBrand(brands);
                 break;
             case 4:
                 // Remove Product from Brand - Implement code for removing a product from a brand
@@ -443,6 +444,120 @@ public class AdminOptions extends JFrame {
         rightPanel.repaint();
     }
 
+    private void addProductToBrand(List<Brand> brands) {
+        // Create a form to enter product details
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        JLabel brandLabel = new JLabel("Enter the name of the brand to which you want to add a product:");
+        JTextField brandNameField = new JTextField(20);
+        JLabel productLabel = new JLabel("Enter the name of the new product:");
+        JTextField productNameField = new JTextField(20);
+        JLabel priceLabel = new JLabel("Enter the price of the new product:");
+        JTextField priceField = new JTextField(20);
+        JLabel descriptionLabel = new JLabel("Enter the description of the new product:");
+        JTextField descriptionField = new JTextField(20);
+        JLabel quantityLabel = new JLabel("Enter the number of units in stock:");
+        JTextField quantityField = new JTextField(20);
+        JLabel inventoryLabel = new JLabel("Enter the inventory level:");
+        JTextField inventoryField = new JTextField(20);
+        JButton addButton = new JButton("Add Product");
+
+        addButton.addActionListener(e -> {
+            String brandName = brandNameField.getText().trim();
+            String productName = productNameField.getText().trim();
+            String priceStr = priceField.getText().trim();
+            String description = descriptionField.getText().trim();
+            String quantityStr = quantityField.getText().trim();
+            String inventoryStr = inventoryField.getText().trim();
+
+            // Validate input
+            if (brandName.isEmpty() || productName.isEmpty() || priceStr.isEmpty() || description.isEmpty() || quantityStr.isEmpty() || inventoryStr.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            double productPrice;
+            int quantityInStock;
+            int inventoryLevel;
+
+            try {
+                productPrice = Double.parseDouble(priceStr);
+                quantityInStock = Integer.parseInt(quantityStr);
+                inventoryLevel = Integer.parseInt(inventoryStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid input format. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Find the selected brand
+            Brand selectedBrand = null;
+            for (Brand brand : BrandDatabase.getBrands()) {
+                if (brand.getName().equalsIgnoreCase(brandName)) {
+                    selectedBrand = brand;
+                    break;
+                }
+            }
+
+            if (selectedBrand != null) {
+                // Create a new product
+                Product newProduct = new Product(productName, productPrice, description, quantityInStock);
+
+                // Add the new product to the selected brand
+                selectedBrand.addProduct(newProduct);
+
+                // Show a confirmation message
+                JOptionPane.showMessageDialog(null, "New product added to " + selectedBrand.getName() + ": " + productName);
+
+                // Clear input fields
+                brandNameField.setText("");
+                productNameField.setText("");
+                priceField.setText("");
+                descriptionField.setText("");
+                quantityField.setText("");
+                inventoryField.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        formPanel.add(brandLabel, gbc);
+        gbc.gridy = 1;
+        formPanel.add(brandNameField, gbc);
+        gbc.gridy = 2;
+        formPanel.add(productLabel, gbc);
+        gbc.gridy = 3;
+        formPanel.add(productNameField, gbc);
+        gbc.gridy = 4;
+        formPanel.add(priceLabel, gbc);
+        gbc.gridy = 5;
+        formPanel.add(priceField, gbc);
+        gbc.gridy = 6;
+        formPanel.add(descriptionLabel, gbc);
+        gbc.gridy = 7;
+        formPanel.add(descriptionField, gbc);
+        gbc.gridy = 8;
+        formPanel.add(quantityLabel, gbc);
+        gbc.gridy = 9;
+        formPanel.add(quantityField, gbc);
+        gbc.gridy = 10;
+        formPanel.add(inventoryLabel, gbc);
+        gbc.gridy = 11;
+        formPanel.add(inventoryField, gbc);
+        gbc.gridy = 12;
+        formPanel.add(addButton, gbc);
+
+        // Clear the right panel and add the formPanel
+        rightPanel.removeAll();
+        rightPanel.add(formPanel);
+        rightPanel.setLayout(new GridBagLayout());
+        rightPanel.revalidate();
+        rightPanel.repaint();
+    }
 
 
 
