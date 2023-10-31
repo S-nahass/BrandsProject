@@ -8,7 +8,7 @@ public class Product {
     private double price;
     private String description;
     private List<UserReview> productReviews;
-
+    private int quantity;
     private int inventoryLevel; // Add an inventoryLevel field
 
 
@@ -20,6 +20,7 @@ public class Product {
         this.description = description;
         this.productReviews = new ArrayList<>();
         this.inventoryLevel = inventoryLevel;
+        this.quantity = quantity;
 
     }
 
@@ -67,4 +68,15 @@ public class Product {
             return false;
         }
     }
+
+    // set quantity
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    // get quantity
+    public int getQuantity() {
+        return quantity;
+    }
+
 }
