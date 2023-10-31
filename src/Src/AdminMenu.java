@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
-    private List<Brand> brands;
-    private Scanner scanner;
+    private final List<Brand> brands;
+    private final Scanner scanner;
 
     public AdminMenu(List<Brand> brands) {
         this.brands = brands;

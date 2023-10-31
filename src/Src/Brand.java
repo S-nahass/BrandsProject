@@ -8,12 +8,12 @@ public class Brand {
     private String category;
     private int yearFounded;
     private String countryOfOrigin;
-    private List<Product> products;
+    private final List<Product> products;
     //  private List<UserFeedback> feedback;
-    private List<UserReview> brandReviews;
+    private final List<UserReview> brandReviews;
 
 
-    private String brandHistory;
+    private final String brandHistory;
 
     public Brand(String name, String category, int yearFounded, String countryOfOrigin, String brandHistory) {
         this.name = name;

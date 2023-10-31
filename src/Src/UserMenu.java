@@ -251,7 +251,8 @@ public class UserMenu {
                 System.out.println("Description: " + selectedProduct.getDescription());
                 // You can add more product details here if needed
             } else // User chose to go back
-                if (productChoice == 0) return;
+                if (productChoice == 0) {
+                }
                 else {
                 System.out.println("Invalid product choice.");
             }
@@ -261,7 +262,7 @@ public class UserMenu {
     }
     public void markBrandAsFavorite(BrandDatabase brandDatabase) {
         // Display a list of available brands to the user
-        List<Brand> brands = brandDatabase.getBrands();
+        List<Brand> brands = BrandDatabase.getBrands();
         System.out.println("Available Brands:");
         for (int i = 0; i < brands.size(); i++) {
             System.out.println((i + 1) + ". " + brands.get(i).getName());
@@ -338,7 +339,6 @@ public class UserMenu {
                 }
             } else if (productChoice == 0) {
                 // User chose to go back
-                return;
             } else {
                 System.out.println("Invalid product choice.");
             }

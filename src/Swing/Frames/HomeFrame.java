@@ -15,17 +15,17 @@ import java.util.ArrayList;
 
 public class HomeFrame extends JFrame {
     private static String username;
-    private String password;
-    private List<String> favorites = new ArrayList<>();
+    private final String password;
+    private final List<String> favorites = new ArrayList<>();
     private List<Brand> brands; // Assuming you have a list of Brand objects
-    private List<UserReview> userReviews = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
-    private List<Product> purchasedProducts = new ArrayList<>(); // A list to track purchased products
+    private final List<UserReview> userReviews = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
+    private final List<Product> purchasedProducts = new ArrayList<>(); // A list to track purchased products
 
 
 
     public HomeFrame(String username) {
-        this.username = username;
+        HomeFrame.username = username;
         this.password = username;
 
 
@@ -318,7 +318,7 @@ public class HomeFrame extends JFrame {
         // Remove previous content from the frame
 
         BrandDatabase brandDatabase = new BrandDatabase();
-        List<Brand> availableBrands = brandDatabase.getBrands(); // Use the instance method
+        List<Brand> availableBrands = BrandDatabase.getBrands(); // Use the instance method
 
         // Create a custom table model to hold the available brands
         DefaultTableModel tableModel = new DefaultTableModel() {
@@ -466,7 +466,7 @@ public class HomeFrame extends JFrame {
 
         seeBrandReviewsButton.addActionListener(e -> {
             // Handle "See Products" button click
-
+            displayBrandReviews(brandName);
 
         });
 
@@ -558,7 +558,7 @@ public class HomeFrame extends JFrame {
 
     private void viewBrandDetails(String brandName) {
         BrandDatabase brandDatabase = new BrandDatabase();
-        List<Brand> brands = brandDatabase.getBrands(); // Use the instance method
+        List<Brand> brands = BrandDatabase.getBrands(); // Use the instance method
 
         Brand selectedBrand = null;
 
@@ -606,98 +606,178 @@ public class HomeFrame extends JFrame {
     }
 
     private void leaveBrandReview(String brandName) {
-        // Create a dialog to collect review input
-        JDialog reviewDialog = new JDialog(this, "Leave a Review for " + brandName, true);
-        reviewDialog.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
-        reviewDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        reviewDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); // Set modality type to prevent interaction with other windows
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<Brand> brands = BrandDatabase.getBrands();
 
-        // Create a panel to hold review input components
-        JPanel reviewPanel = new JPanel();
-        reviewPanel.setBackground(Color.WHITE); // Set background color to white
-        reviewPanel.setLayout(new GridLayout(0, 1));
+        Brand selectedBrand = null;
 
-        // Create a text area for the user to input their review
-        JTextArea reviewTextArea = new JTextArea(5, 30);
-        reviewTextArea.setLineWrap(true);
-        reviewTextArea.setWrapStyleWord(true);
-        reviewTextArea.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
-        reviewTextArea.setForeground(Color.BLACK); // Set text color to black
-        reviewTextArea.setBackground(new Color(210, 203, 203)); // Set background color to light gray
-
-        // Create a rating scale using radio buttons
-        JPanel ratingPanel = new JPanel();
-        ratingPanel.setBackground(Color.WHITE); // Set background color to white
-        ratingPanel.setLayout(new FlowLayout());
-
-        JLabel ratingLabel = new JLabel("Rating: ");
-        ratingLabel.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
-        ratingLabel.setForeground(Color.BLACK); // Set text color to black
-        ratingPanel.add(ratingLabel);
-
-        ButtonGroup ratingGroup = new ButtonGroup();
-
-        for (int i = 1; i <= 5; i++) {
-            JRadioButton radioButton = new JRadioButton(String.valueOf(i));
-            radioButton.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
-            radioButton.setForeground(Color.BLACK); // Set text color to black
-            radioButton.setBackground(Color.WHITE); // Set background color to white
-            ratingGroup.add(radioButton);
-            ratingPanel.add(radioButton);
+        // Find the brand with the matching name
+        for (Brand brand : brands) {
+            if (brand.getName().equals(brandName)) {
+                selectedBrand = brand;
+                break; // Stop searching once the brand is found
+            }
         }
 
-        // Create a "Submit" button to submit the review
-        JButton submitButton = new JButton("Submit");
-        submitButton.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
-        submitButton.setForeground(Color.WHITE); // Set text color to white
-        submitButton.setBackground(Color.darkGray); // Set background color to blue
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String userReview = reviewTextArea.getText();
-                int userRating = 0;
+        if (selectedBrand != null) {
 
-                // Get the selected rating value from the radio buttons
-                for (Enumeration<AbstractButton> buttons = ratingGroup.getElements(); buttons.hasMoreElements(); ) {
-                    AbstractButton button = buttons.nextElement();
+            // Create a dialog to collect review input
+            JDialog reviewDialog = new JDialog(this, "Leave a Review for " + brandName, true);
+            reviewDialog.setFont(new Font("Garamond", Font.PLAIN, 16));
+            reviewDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            reviewDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
-                    if (button.isSelected()) {
-                        userRating = Integer.parseInt(button.getText());
-                        break;
-                    }
-                }
+            // Create a panel to hold review input components
+            JPanel reviewPanel = new JPanel();
+            reviewPanel.setBackground(Color.WHITE);
+            reviewPanel.setLayout(new GridLayout(0, 1));
 
-                // You can save the review and rating data to your Brand or BrandDatabase class
-                // Implement your data saving logic here
-                System.out.println("Review submitted: " + userReview);
-                System.out.println("Rating submitted: " + userRating);
-                reviewDialog.dispose();
+            // Create a text area for the user to input their review
+            JTextArea reviewTextArea = new JTextArea(5, 30);
+            reviewTextArea.setLineWrap(true);
+            reviewTextArea.setWrapStyleWord(true);
+            reviewTextArea.setFont(new Font("Garamond", Font.PLAIN, 16));
+            reviewTextArea.setForeground(Color.BLACK);
+            reviewTextArea.setBackground(new Color(210, 203, 203));
+
+            // Create a rating scale using radio buttons
+            JPanel ratingPanel = new JPanel();
+            ratingPanel.setBackground(Color.WHITE);
+            ratingPanel.setLayout(new FlowLayout());
+
+            JLabel ratingLabel = new JLabel("Rating: ");
+            ratingLabel.setFont(new Font("Garamond", Font.PLAIN, 16));
+            ratingLabel.setForeground(Color.BLACK);
+            ratingPanel.add(ratingLabel);
+
+            ButtonGroup ratingGroup = new ButtonGroup();
+
+            for (int i = 1; i <= 5; i++) {
+                JRadioButton radioButton = new JRadioButton(String.valueOf(i));
+                radioButton.setFont(new Font("Garamond", Font.PLAIN, 16));
+                radioButton.setForeground(Color.BLACK);
+                radioButton.setBackground(Color.WHITE);
+                ratingGroup.add(radioButton);
+                ratingPanel.add(radioButton);
             }
-        });
 
-        // Add components to the review panel
-        // Create a "Your Review" label with a custom font
-        JLabel reviewLabel = new JLabel("Your Review:");
-        reviewLabel.setFont(new Font("Garamond", Font.PLAIN, 16)); // Set font to Garamond and size to 16
-        reviewLabel.setForeground(Color.BLACK); // Set text color to black
+            // Create a "Submit" button to submit the review
+            JButton submitButton = new JButton("Submit");
+            submitButton.setFont(new Font("Garamond", Font.PLAIN, 16));
+            submitButton.setForeground(Color.WHITE);
+            submitButton.setBackground(Color.darkGray);
 
-        reviewPanel.add(reviewLabel);
-        reviewPanel.add(reviewTextArea);
-        reviewPanel.add(ratingPanel);
-        reviewPanel.add(submitButton);
+            Brand finalSelectedBrand = selectedBrand;
+            submitButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String userReview = reviewTextArea.getText();
+                    int userRating = 0;
 
-        // Add the review panel to the dialog
-        reviewDialog.add(reviewPanel);
+                    // Get the selected rating value from the radio buttons
+                    for (Enumeration<AbstractButton> buttons = ratingGroup.getElements(); buttons.hasMoreElements(); ) {
+                        AbstractButton button = buttons.nextElement();
 
-        // Set dialog properties and make it visible
-        reviewDialog.pack();
-        reviewDialog.setLocationRelativeTo(null); // Center the dialog in the middle of the screen
-        reviewDialog.setVisible(true);
+                        if (button.isSelected()) {
+                            userRating = Integer.parseInt(button.getText());
+                            break;
+                        }
+                    }
+
+                    // Create a UserReview object
+                    UserReview userReviewSubmitted = new UserReview(username, brandName, userRating, userReview);
+                    finalSelectedBrand.addUserReview(userReviewSubmitted);
+
+
+                    System.out.println("Review submitted: " + userReview);
+                    System.out.println("Rating submitted: " + userRating);
+                    reviewDialog.dispose();
+                }
+            });
+
+
+            // Add components to the review panel
+            JLabel reviewLabel = new JLabel("Your Review:");
+            reviewLabel.setFont(new Font("Garamond", Font.PLAIN, 16));
+            reviewLabel.setForeground(Color.BLACK);
+
+            reviewPanel.add(reviewLabel);
+            reviewPanel.add(reviewTextArea);
+            reviewPanel.add(ratingPanel);
+            reviewPanel.add(submitButton);
+
+            // Add the review panel to the dialog
+            reviewDialog.add(reviewPanel);
+
+            // Set dialog properties and make it visible
+            reviewDialog.pack();
+            reviewDialog.setLocationRelativeTo(null);
+            reviewDialog.setVisible(true);
+
+        }
+
     }
+
+    private void displayBrandReviews(String brandName) {
+        BrandDatabase brandDatabase = new BrandDatabase();
+        List<Brand> brands = BrandDatabase.getBrands();
+
+        // Find the selected brand
+        Brand selectedBrand = null;
+        for (Brand brand : brands) {
+            if (brand.getName().equals(brandName)) {
+                selectedBrand = brand;
+                break;
+            }
+        }
+
+        if (selectedBrand == null) {
+            System.out.println("Brand not found.");
+            return;
+        }
+
+        List<UserReview> userReviews = selectedBrand.getBrandReviews();
+
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Brand Reviews");
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setModal(true); // Set the dialog to be modal
+        dialog.setLocationRelativeTo(null); // Center the dialog on the screen
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        Font garamondFont = new Font("Garamond", Font.PLAIN, 16);
+
+        if (userReviews.isEmpty()) {
+            JLabel noReviewsLabel = new JLabel("No reviews available for this brand.");
+            noReviewsLabel.setFont(garamondFont);
+            panel.add(noReviewsLabel);
+        } else {
+            for (UserReview review : userReviews) {
+                JLabel usernameLabel = new JLabel("Username: " + review.getUserName());
+                usernameLabel.setFont(garamondFont);
+                JLabel ratingLabel = new JLabel("Rating: " + review.getRating());
+                ratingLabel.setFont(garamondFont);
+                JLabel reviewLabel = new JLabel("Review: " + review.getContent());
+                reviewLabel.setFont(garamondFont);
+                panel.add(usernameLabel);
+                panel.add(ratingLabel);
+                panel.add(reviewLabel);
+                panel.add(Box.createVerticalStrut(10)); // Add some vertical spacing between each review
+                panel.add(new JSeparator(SwingConstants.HORIZONTAL)); // Add a horizontal separator line between reviews
+            }
+        }
+
+        dialog.getContentPane().add(panel);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
 
     private List<Product> showProducts(String brandName) {
         BrandDatabase brandDatabase = new BrandDatabase();
-        List<Brand> brands = brandDatabase.getBrands();
+        List<Brand> brands = BrandDatabase.getBrands();
 
 
         Brand selectedBrand = null;
@@ -731,8 +811,7 @@ public class HomeFrame extends JFrame {
                 public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                                                               boolean isSelected, boolean cellHasFocus) {
                     Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                    if (value instanceof Product) {
-                        Product product = (Product) value;
+                    if (value instanceof Product product) {
                         setText(product.getName() + " - Price: $" + product.getPrice());
                     }
                     return component;
@@ -787,8 +866,6 @@ public class HomeFrame extends JFrame {
     }
 
 
-
-
     private void viewPurchases(List<Product> purchasedProducts) {
         // Create a modal dialog to display the user's purchases
         JDialog purchasesDialog = new JDialog((Frame) null, "View Purchases", true);
@@ -809,8 +886,7 @@ public class HomeFrame extends JFrame {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof Product) {
-                    Product product = (Product) value;
+                if (value instanceof Product product) {
                     setText(product.getName() + " (Quantity: " + product.getQuantity() + ")");
                 }
                 return component;
@@ -831,6 +907,9 @@ public class HomeFrame extends JFrame {
         purchasesDialog.setLocationRelativeTo(null);
         purchasesDialog.setVisible(true);
     }
+
+
+
 }
 
 

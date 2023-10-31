@@ -9,8 +9,8 @@ public class FeedbackManagement {
 
 
     public FeedbackManagement( List<Brand> brands, List<UserReview> userReviews) {
-        this.userReviews = userReviews;
-        this.brands = brands;
+        FeedbackManagement.userReviews = userReviews;
+        FeedbackManagement.brands = brands;
     }
 
 

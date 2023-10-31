@@ -3,10 +3,10 @@ package Src;
 import java.util.List;
 
 public class UserReview {
-    private String userName;
+    private final String userName;
     private Product product;
-    private int rating;
-    private String content;
+    private final int rating;
+    private final String content;
     private static List<UserReview> userReviews;
 
     public UserReview(String userName, Product product, int rating, String content) {
@@ -21,6 +21,12 @@ public class UserReview {
         this.userName = userName;
         this.rating = rating;
         this.content = reviewText;
+    }
+
+    public UserReview(String username, String brandName, int userRating, String userReview) {
+        this.userName = username;
+        this.rating = userRating;
+        this.content = userReview;
     }
 
     public String getUserName() {

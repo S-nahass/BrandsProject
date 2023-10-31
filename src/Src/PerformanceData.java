@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PerformanceData {
-    private String name;  // Name of the brand or product
-    private List<SalesRecord> salesHistory;
-    private List<ProductPopularity> productPopularity;
+    private final String name;  // Name of the brand or product
+    private final List<SalesRecord> salesHistory;
+    private final List<ProductPopularity> productPopularity;
 
     public PerformanceData(String name) {
         this.name = name;
@@ -37,9 +37,9 @@ public class PerformanceData {
 }
 
 class SalesRecord {
-    private int year;
-    private int quantitySold;
-    private double totalRevenue;
+    private final int year;
+    private final int quantitySold;
+    private final double totalRevenue;
 
     public SalesRecord(int year, int quantitySold, double totalRevenue) {
         this.year = year;
@@ -61,8 +61,8 @@ class SalesRecord {
 }
 
 class ProductPopularity {
-    private String productName;
-    private int popularityScore;
+    private final String productName;
+    private final int popularityScore;
 
     public ProductPopularity(String productName, int popularityScore) {
         this.productName = productName;

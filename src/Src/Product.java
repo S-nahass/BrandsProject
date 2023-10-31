@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Product {
-    private String name;
-    private double price;
-    private String description;
-    private List<UserReview> productReviews;
+    private final String name;
+    private final double price;
+    private final String description;
+    private final List<UserReview> productReviews;
     private int quantity;
     private int inventoryLevel; // Add an inventoryLevel field
 
