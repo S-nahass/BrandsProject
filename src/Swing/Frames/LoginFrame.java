@@ -13,7 +13,7 @@ public class LoginFrame extends JFrame {
         // Set up the frame
         setTitle("Clothing Retail App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(600, 300);
         setLocationRelativeTo(null); // Center the frame on the screen
 
         // Set the background color
