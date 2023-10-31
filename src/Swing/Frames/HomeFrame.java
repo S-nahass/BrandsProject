@@ -17,9 +17,6 @@ public class HomeFrame extends JFrame {
     private static String username;
     private final String password;
     private final List<String> favorites = new ArrayList<>();
-    private List<Brand> brands; // Assuming you have a list of Brand objects
-    private final List<UserReview> userReviews = new ArrayList<>();
-    private final List<Product> products = new ArrayList<>();
     private final List<Product> purchasedProducts = new ArrayList<>(); // A list to track purchased products
 
 
@@ -51,7 +48,7 @@ public class HomeFrame extends JFrame {
         add(bottomMenu, BorderLayout.SOUTH);
 
         // Create the search bar using a method
-        JPanel searchBar = createSearchBar(this);
+        JPanel searchBar = createSearchBar();
 
         // Create a JTextArea to display search results
         JTextArea resultsArea = new JTextArea(10, 30);
@@ -99,44 +96,32 @@ public class HomeFrame extends JFrame {
         profileButton.setForeground(Color.black);
 
         // Add ActionListeners to the buttons
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // if home button is clicked, redirect to default homeFrame
-                SwingUtilities.invokeLater(() -> {
-                    new HomeFrame(username); // Pass the username to the HomeFrame constructor
-                    dispose();
-                });
-            }
+        homeButton.addActionListener(e -> {
+            // if home button is clicked, redirect to default homeFrame
+            SwingUtilities.invokeLater(() -> {
+                new HomeFrame(username); // Pass the username to the HomeFrame constructor
+                dispose();
+            });
         });
 
-        brandsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle the Brands button click
-                // Show List of Brands
-                viewAvailableBrands();
-                System.out.println("Brands button clicked");
-            }
+        brandsButton.addActionListener(e -> {
+            // Handle the Brands button click
+            // Show List of Brands
+            viewAvailableBrands();
+            System.out.println("Brands button clicked");
         });
 
-        favoritesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle the Favorites button click
-                // show favorited brands
-                showFavorites();
-                System.out.println("Favorites button clicked");
-            }
+        favoritesButton.addActionListener(e -> {
+            // Handle the Favorites button click
+            // show favorited brands
+            showFavorites();
+            System.out.println("Favorites button clicked");
         });
 
-        profileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle the Profile button click
-                showProfileOptions();
-                System.out.println("Profile button clicked");
-            }
+        profileButton.addActionListener(e -> {
+            // Handle the Profile button click
+            showProfileOptions();
+            System.out.println("Profile button clicked");
         });
 
 
@@ -150,7 +135,7 @@ public class HomeFrame extends JFrame {
     }
 
     // Method to create the search bar
-    public JPanel createSearchBar(JFrame frame) {
+    public JPanel createSearchBar() {
         JPanel searchBar = new JPanel();
         searchBar.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
@@ -168,14 +153,11 @@ public class HomeFrame extends JFrame {
         searchBar.add(searchButton);
 
         // Add ActionListeners to handle the search logic
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String searchTerm = searchField.getText();
-                if (searchTerm != null && !searchTerm.isEmpty()) {
-                    List<Brand> searchResults = performBrandSearch(searchTerm);
-                    showBrandSearchResults(searchResults);
-                }
+        searchButton.addActionListener(e -> {
+            String searchTerm = searchField.getText();
+            if (searchTerm != null && !searchTerm.isEmpty()) {
+                List<Brand> searchResults = performBrandSearch(searchTerm);
+                showBrandSearchResults(searchResults);
             }
         });
 
@@ -184,7 +166,6 @@ public class HomeFrame extends JFrame {
 
     private List<Brand> performBrandSearch(String searchTerm) {
         List<Brand> searchResults = new ArrayList<>();
-        BrandDatabase brandDatabase = new BrandDatabase();
 
         // Simulate a brand search using your existing data
         for (Brand brand : BrandDatabase.getBrands()) {
@@ -215,7 +196,16 @@ public class HomeFrame extends JFrame {
             public boolean isCellEditable(int row, int column) {
                 return column == 1; // Only the checkbox column is editable
             }
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 1) {
+                    return Boolean.class; // Set the class of the second column to Boolean (checkbox)
+                }
+                return super.getColumnClass(columnIndex);
+            }
         };
+
+
         tableModel.addColumn("Brand Name");
         tableModel.addColumn("Mark Favorite");
         tableModel.addColumn("Category");
@@ -249,7 +239,7 @@ public class HomeFrame extends JFrame {
         // Add the bottom menu to the frame
         add(bottomMenu, BorderLayout.SOUTH);
         // Create the search bar using a method
-        JPanel searchBar = createSearchBar(this);
+        JPanel searchBar = createSearchBar();
         add(searchBar, BorderLayout.NORTH);
 
         revalidate(); // Refresh the UI to show the added results panel
@@ -317,7 +307,6 @@ public class HomeFrame extends JFrame {
     private void viewAvailableBrands() {
         // Remove previous content from the frame
 
-        BrandDatabase brandDatabase = new BrandDatabase();
         List<Brand> availableBrands = BrandDatabase.getBrands(); // Use the instance method
 
         // Create a custom table model to hold the available brands
@@ -365,7 +354,7 @@ public class HomeFrame extends JFrame {
         // Add the bottom menu to the frame
         add(bottomMenu, BorderLayout.SOUTH);
         // Create the search bar using a method
-        JPanel searchBar = createSearchBar(this);
+        JPanel searchBar = createSearchBar();
         add(searchBar, BorderLayout.NORTH);
 
         // Add the scrollPane with the table to the contentPanel
@@ -447,8 +436,7 @@ public class HomeFrame extends JFrame {
         // Add action listeners to the buttons to handle user interactions
         seeBrandDetailsButton.addActionListener(e -> {
             // Handle "See Brand Details" button click
-            String selectedBrandName = brandName;
-            viewBrandDetails(selectedBrandName);
+            viewBrandDetails(brandName);
         });
 
         seeProductsButton.addActionListener(e -> {
@@ -460,14 +448,12 @@ public class HomeFrame extends JFrame {
 
         leaveBrandReviewButton.addActionListener(e -> {
             // Handle "Leave Brand Review" button click
-            String selectedBrandName = brandName;
-            leaveBrandReview(selectedBrandName);
+            leaveBrandReview(brandName);
         });
 
         seeBrandReviewsButton.addActionListener(e -> {
             // Handle "See Products" button click
             displayBrandReviews(brandName);
-
         });
 
 
@@ -503,7 +489,6 @@ public class HomeFrame extends JFrame {
     }
 
     private void showFavorites() {
-        BrandDatabase brandDatabase = new BrandDatabase();
         List<String> favorites = getFavorites(); // Use the instance method
 
         // Create a custom table model to hold the favorited brands
@@ -556,8 +541,8 @@ public class HomeFrame extends JFrame {
         return favorites;
     }
 
+
     private void viewBrandDetails(String brandName) {
-        BrandDatabase brandDatabase = new BrandDatabase();
         List<Brand> brands = BrandDatabase.getBrands(); // Use the instance method
 
         Brand selectedBrand = null;
@@ -606,7 +591,6 @@ public class HomeFrame extends JFrame {
     }
 
     private void leaveBrandReview(String brandName) {
-        BrandDatabase brandDatabase = new BrandDatabase();
         List<Brand> brands = BrandDatabase.getBrands();
 
         Brand selectedBrand = null;
@@ -668,31 +652,27 @@ public class HomeFrame extends JFrame {
             submitButton.setBackground(Color.darkGray);
 
             Brand finalSelectedBrand = selectedBrand;
-            submitButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String userReview = reviewTextArea.getText();
-                    int userRating = 0;
+            submitButton.addActionListener(e -> {
+                String userReview = reviewTextArea.getText();
+                int userRating = 0;
 
-                    // Get the selected rating value from the radio buttons
-                    for (Enumeration<AbstractButton> buttons = ratingGroup.getElements(); buttons.hasMoreElements(); ) {
-                        AbstractButton button = buttons.nextElement();
+                // Get the selected rating value from the radio buttons
+                for (Enumeration<AbstractButton> buttons = ratingGroup.getElements(); buttons.hasMoreElements(); ) {
+                    AbstractButton button = buttons.nextElement();
 
-                        if (button.isSelected()) {
-                            userRating = Integer.parseInt(button.getText());
-                            break;
-                        }
+                    if (button.isSelected()) {
+                        userRating = Integer.parseInt(button.getText());
+                        break;
                     }
-
-                    // Create a UserReview object
-                    UserReview userReviewSubmitted = new UserReview(username, brandName, userRating, userReview);
-                    finalSelectedBrand.addUserReview(userReviewSubmitted);
-
-
-                    System.out.println("Review submitted: " + userReview);
-                    System.out.println("Rating submitted: " + userRating);
-                    reviewDialog.dispose();
                 }
+
+                // Create a UserReview object
+                UserReview userReviewSubmitted = new UserReview(username, brandName, userRating, userReview);
+                finalSelectedBrand.addUserReview(userReviewSubmitted);
+
+                System.out.println("Review submitted: " + userReview);
+                System.out.println("Rating submitted: " + userRating);
+                reviewDialog.dispose();
             });
 
 
@@ -718,8 +698,8 @@ public class HomeFrame extends JFrame {
 
     }
 
+
     private void displayBrandReviews(String brandName) {
-        BrandDatabase brandDatabase = new BrandDatabase();
         List<Brand> brands = BrandDatabase.getBrands();
 
         // Find the selected brand
@@ -773,10 +753,7 @@ public class HomeFrame extends JFrame {
         dialog.pack();
         dialog.setVisible(true);
     }
-
-
-    private List<Product> showProducts(String brandName) {
-        BrandDatabase brandDatabase = new BrandDatabase();
+    private void showProducts(String brandName) {
         List<Brand> brands = BrandDatabase.getBrands();
 
 
@@ -862,8 +839,9 @@ public class HomeFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "Brand not found: " + brandName, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        return purchasedProducts;
     }
+
+
 
 
     private void viewPurchases(List<Product> purchasedProducts) {
@@ -907,9 +885,6 @@ public class HomeFrame extends JFrame {
         purchasesDialog.setLocationRelativeTo(null);
         purchasesDialog.setVisible(true);
     }
-
-
-
 }
 
 

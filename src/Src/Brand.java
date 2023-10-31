@@ -90,38 +90,6 @@ public class Brand {
         return brandReviews;
     }
 
-    // get user review
-    public List<String> getReviewText() {
-        List<String> userReviews = new ArrayList<>();
-        for (UserReview userReview : brandReviews) {
-            userReviews.add(userReview.getContent());
-        }
-
-        return userReviews;
-    }
-
-    // get brand rating
-    public List<Integer> getRating() {
-
-        List<Integer> userRatings = new ArrayList<>();
-        for (UserReview userReview : brandReviews) {
-            userRatings.add(userReview.getRating());
-        }
-
-        return userRatings;
-    }
-
-    // get username for brand review
-    public List<String> getUserName() {
-        List<String> userNames = new ArrayList<>();
-        for (UserReview userReview : brandReviews) {
-            userNames.add(userReview.getUserName());
-        }
-
-        return userNames;
-    }
-
-
 
     // for GUI results display
     @Override

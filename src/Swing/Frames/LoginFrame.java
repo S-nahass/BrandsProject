@@ -47,15 +47,12 @@ public class LoginFrame extends JFrame {
         loginButton.setBackground(Color.darkGray);
 
         // Add an action listener to the button
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Retrieve the username and password
-                // Open the home page
-                username = usernameField.getText();
-                password = new String(passwordField.getPassword()); // Retrieve the password securely
-                openHomePage();
-            }
+        loginButton.addActionListener(e -> {
+            // Retrieve the username and password
+            // Open the home page
+            username = usernameField.getText();
+            password = new String(passwordField.getPassword()); // Retrieve the password securely
+            openHomePage();
         });
 
         // Create a panel to organize the components

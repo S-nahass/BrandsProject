@@ -210,7 +210,7 @@ public class AdminMenu {
             scanner.nextLine(); // Consume the newline character
 
             // Create a new product
-            Product newProduct = new Product(productName, productPrice, productDescription, quantityInStock);
+            Product newProduct = new Product(productName, productPrice, productDescription, inventoryLevel);
 
             // Add the new product to the selected brand
             selectedBrand.addProduct(newProduct);

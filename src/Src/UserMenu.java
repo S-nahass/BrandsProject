@@ -52,7 +52,7 @@ public class UserMenu {
                     viewAndInquireAboutProduct(brands);
                     break;
                 case 5:
-                    markBrandAsFavorite(new BrandDatabase());
+                    markBrandAsFavorite();
                     break;
                 case 6:
                     viewFavoriteBrands();
@@ -252,6 +252,8 @@ public class UserMenu {
                 // You can add more product details here if needed
             } else // User chose to go back
                 if (productChoice == 0) {
+
+
                 }
                 else {
                 System.out.println("Invalid product choice.");
@@ -260,7 +262,7 @@ public class UserMenu {
             System.out.println("Brand not found.");
         }
     }
-    public void markBrandAsFavorite(BrandDatabase brandDatabase) {
+    public void markBrandAsFavorite() {
         // Display a list of available brands to the user
         List<Brand> brands = BrandDatabase.getBrands();
         System.out.println("Available Brands:");

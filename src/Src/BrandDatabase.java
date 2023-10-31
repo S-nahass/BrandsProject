@@ -188,7 +188,7 @@ public class BrandDatabase {
         brand19.addProduct(product38);
         brands.add(brand19);
 
-// Brand 20: Fendi
+        // Brand 20: Fendi
         Brand brand20 = new Brand("Fendi", "Luxury", 1925, "Italy", "Fendi is an Italian luxury brand known for its fur and leather goods.");
         Product product39 = new Product("Fur Shoulder Bag", 499.99, "Elegant fur shoulder bag with Fendi logo.", 100);
         Product product40 = new Product("FF Logo Belt", 199.99, "Stylish FF logo belt for a fashionable touch.", 100);

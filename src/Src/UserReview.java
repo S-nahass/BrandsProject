@@ -7,7 +7,6 @@ public class UserReview {
     private Product product;
     private final int rating;
     private final String content;
-    private static List<UserReview> userReviews;
 
     public UserReview(String userName, Product product, int rating, String content) {
         this.userName = userName;
@@ -16,17 +15,17 @@ public class UserReview {
         this.content = content;
     }
 
-
     public UserReview(String userName, Brand selectedBrand, int rating, String reviewText) {
         this.userName = userName;
         this.rating = rating;
         this.content = reviewText;
     }
 
-    public UserReview(String username, String brandName, int userRating, String userReview) {
-        this.userName = username;
-        this.rating = userRating;
-        this.content = userReview;
+    //for gui constructor
+    public UserReview(String userName, String brandName, int rating, String content){
+        this.userName = userName;
+        this.rating = rating;
+        this.content = content;
     }
 
     public String getUserName() {
@@ -44,10 +43,6 @@ public class UserReview {
 
     public String getContent() {
         return content;
-    }
-
-    public static List<UserReview> getUserReviews() {
-        return  userReviews;
     }
 
     @Override

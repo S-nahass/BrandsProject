@@ -20,8 +20,6 @@ public class Product {
         this.description = description;
         this.productReviews = new ArrayList<>();
         this.inventoryLevel = inventoryLevel;
-        this.quantity = quantity;
-
     }
 
 
