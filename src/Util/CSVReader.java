@@ -44,7 +44,7 @@ public class CSVReader {
 
     // Fetch a brand from the CSV file
     public static Brand getBrandFromFile(String brandName) {
-        try (BufferedReader br = new BufferedReader(new FileReader("C:/Users/USER/Desktop/Brand/src/Brands.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("C:/Users/USER/Desktop/BrandsProject/src/Brands.csv"))) {
             // Skip the header
             br.readLine();
 

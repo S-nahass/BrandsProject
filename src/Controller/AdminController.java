@@ -63,7 +63,7 @@ public class AdminController {
 
                 // Create a new brand and add it to the list of brands
                 brandModel = new Brand(brandName, brandCategory, yearFounded, countryOfOrigin, "Brand History");
-                CSVWriter.writeToCSV("C:/Users/USER/Desktop/Brand/src/Brands.csv", brandModel);
+                CSVWriter.writeToCSV("C:/Users/USER/Desktop/BrandsProject/src/Brands.csv", brandModel);
 
                 // Show a success message
                 JOptionPane.showMessageDialog(null, "Brand added successfully.");
@@ -511,7 +511,7 @@ public class AdminController {
 
                 // Create a list of products
                 DefaultListModel<String> productList = new DefaultListModel<>();
-                List<Product> products = CSVReader.getProductsByBrand(selectedBrand.getName(),"C:/Users/USER/Desktop/Brand/src/Products.csv" );
+                List<Product> products = CSVReader.getProductsByBrand(selectedBrand.getName(),"C:/Users/USER/Desktop/BrandsProject/src/Products.csv" );
 
                 for (Product product : products) {
                     productList.addElement(product.getName()); // or any other property you want to display
@@ -693,7 +693,7 @@ public class AdminController {
             if (selectedBrand != null) {
                 // Create a list of products
                 DefaultListModel<String> productList = new DefaultListModel<>();
-                List<Product> products = CSVReader.getProductsByBrand(selectedBrand.getName(),"C:/Users/USER/Desktop/Brand/src/Products.csv" );
+                List<Product> products = CSVReader.getProductsByBrand(selectedBrand.getName(),"C:/Users/USER/Desktop/BrandsProject/src/Products.csv" );
 
                 for (Product product : products) {
                     productList.addElement(product.getName()); // or any other property you want to display

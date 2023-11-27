@@ -518,7 +518,7 @@ public class UserController {
             JLabel promptLabel = new JLabel("Select a product and enter the quantity to purchase");
 
             // Create a list to display the products of the selected brand
-            JList<Product> productsList = new JList<>(CSVReader.getProductsByBrand(selectedBrand.getName(), "C:/Users/USER/Desktop/Brand/src/Products.csv").stream().toArray(Product[]::new));
+            JList<Product> productsList = new JList<>(CSVReader.getProductsByBrand(selectedBrand.getName(), "C:/Users/USER/Desktop/BrandsProject/src/Products.csv").stream().toArray(Product[]::new));
 
             // Set a custom renderer for the list to display the product name and price
             productsList.setCellRenderer(new DefaultListCellRenderer() {

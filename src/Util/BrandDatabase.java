@@ -9,10 +9,10 @@ import java.util.List;
 
 
 public class BrandDatabase {
-    private static final String CSV_FILE_PATH = "C:/Users/USER/Desktop/Brand/src/Brands.csv";
-    private static final String CSV_FILE_PATH2 = "C:/Users/USER/Desktop/Brand/src/Products.csv";
-    private static final String CSV_FILE_PATH3 = "C:/Users/USER/Desktop/Brand/src/Report.csv";
-    private static final String CSV_FILE_PATH4 = "C:/Users/USER/Desktop/Brand/src/Reviews.csv";
+    private static final String CSV_FILE_PATH = "C:/Users/USER/Desktop/BrandsProject/src/Brands.csv";
+    private static final String CSV_FILE_PATH2 = "C:/Users/USER/Desktop/BrandsProject/src/Products.csv";
+    private static final String CSV_FILE_PATH3 = "C:/Users/USER/Desktop/BrandsProject/src/Report.csv";
+    private static final String CSV_FILE_PATH4 = "C:/Users/USER/Desktop/BrandsProject/src/Reviews.csv";
     private static final List<Brand> brands;
     private static final List<Product> products;
     private static final List<Report> reports;
