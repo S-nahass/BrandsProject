@@ -1,143 +1,31 @@
-package Swing.Frames;
+package Controller;
 
-import Src.*;
+import Model.Brand;
+import Model.Product;
+import Model.Report;
+import Model.Reviews;
+import View.AdminLogin;
+import View.AdminOptions;
+import Util.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static java.awt.BorderLayout.*;
+public class AdminController {
+    // Variables
+    private Brand brandModel;
+    private final AdminOptions adminView;
 
-public class AdminOptions extends JFrame {
-
-    private final List<Brand> brands = new ArrayList<>();
-    private final JPanel rightPanel = new JPanel();
-    BrandDatabase brandDatabase = new BrandDatabase();
-
-    public AdminOptions() {
-        // Set up the frame
-        setTitle("Administrator Menu");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-        setLocationRelativeTo(null); // Center the frame on the screen
-
-        // Create a panel to organize components
-        JPanel panel = new JPanel(new BorderLayout());
-
-        // Create a left panel for the menu
-        JPanel leftPanel = new JPanel(new GridBagLayout());
-        leftPanel.setBackground(Color.darkGray);
-
-        // Create buttons for admin functionalities
-        JButton[] adminButtons = new JButton[10];
-        String[] functionalityText = {
-                "Add Brand",
-                "Edit/Update Brand",
-                "Remove Brand",
-                "Add Product to Brand",
-                "Remove Product from Brand",
-                "Categorize Brands",
-                "Manage Inventory",
-                "Generate Reports",
-                "Monitor User Feedback",
-                "Exit"
-        };
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
-
-        for (int i = 0; i < 10; i++) {
-            adminButtons[i] = new JButton();
-            adminButtons[i].setText(functionalityText[i]);
-            adminButtons[i].setFont(new Font("Garamond", Font.BOLD, 16));
-            adminButtons[i].setForeground(Color.white);
-            adminButtons[i].setOpaque(false);
-            adminButtons[i].setContentAreaFilled(false);
-            adminButtons[i].setBorderPainted(false);
-
-            gbc.gridx = 0;
-            gbc.gridy = i;
-            gbc.weightx = 1.0; // Added this line to give buttons horizontal space
-            leftPanel.add(adminButtons[i], gbc);
-
-            final int index = i;
-            adminButtons[i].addActionListener(e -> handleFunctionalityClick(index));
-        }
-
-        // Create a right panel for result display (initially empty)
-        JLabel resultLabel = new JLabel("Results will be displayed here.");
-        resultLabel.setFont(new Font("Garamond", Font.BOLD, 16));
-        rightPanel.setBackground(new Color(203, 208, 210));
-        rightPanel.setAlignmentY(CENTER_ALIGNMENT);
-
-        // Add the left and right panels to the main panel
-        panel.add(leftPanel, WEST);
-        panel.add(rightPanel, CENTER);
-
-        // Add the main panel to the frame
-        add(panel);
-
-        // Make the frame visible
-        setVisible(true);
+    // Constructor
+    public AdminController(Brand brandModel, AdminOptions adminView) {
+        this.brandModel = brandModel;
+        this.adminView = adminView;
     }
 
-    // Handle button click events for admin functionalities
-    private void handleFunctionalityClick(int index) {
-        switch (index) {
-            case 0:
-                // Add Brand - Implement code for adding a brand
-                addBrand(brands);
-                break;
-            case 1:
-                // Edit/Update Brand - Implement code for editing/updating a brand
-                editBrand(brands);
-                break;
-            case 2:
-                // Remove Brand - Implement code for removing a brand
-                removeBrand(brands);
-                break;
-            case 3:
-                // Add Product to Brand - Implement code for adding a product to a brand
-                addProductToBrand(brands);
-                break;
-            case 4:
-                // Remove Product from Brand - Implement code for removing a product from a brand
-                removeProduct(brands);
-                break;
-            case 5:
-                // Categorize Brands - Implement code for categorizing brands
-                categorizeBrand(brands);
-                break;
-            case 6:
-                // Manage Inventory - Implement code for managing product inventory
-                updateProductInventory();
-                break;
-            case 7:
-                // Generate Reports - Implement code for generating reports
-                checkBrandPerformance();
-                break;
-            case 8:
-                // Monitor User Feedback - Implement code for monitoring user feedback
-                viewBrandReviews();
-                break;
-            case 9:
-                // Exit to Main Menu - Implement code to return to the main menu
-                exitPage();
-                break;
-            default:
-                break;
-        }
-    }
-
-    // Method to add a brand using a Swing dialog
-
-
-    // Method to add a brand using a Swing dialog
-    private void addBrand(List<Brand> brands) {
+    // Methods for handling various functionalities...
+    public void handleAddBrand() {
         // Create form components for brand information
         JLabel nameLabel = new JLabel("Brand Name:");
         nameLabel.setFont(new Font("Garamond", Font.BOLD, 16));
@@ -174,8 +62,8 @@ public class AdminOptions extends JFrame {
                 }
 
                 // Create a new brand and add it to the list of brands
-                Brand newBrand = new Brand(brandName, brandCategory, yearFounded, countryOfOrigin, "Brand History");
-                brands.add(newBrand);
+                brandModel = new Brand(brandName, brandCategory, yearFounded, countryOfOrigin, "Brand History");
+                CSVWriter.writeToCSV("C:/Users/USER/Desktop/Brand/src/Brands.csv", brandModel);
 
                 // Show a success message
                 JOptionPane.showMessageDialog(null, "Brand added successfully.");
@@ -223,15 +111,17 @@ public class AdminOptions extends JFrame {
         formPanel.add(addButton, gbc);
 
         // Clear the right panel and add the formPanel, filling the available space
-        rightPanel.removeAll();
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.add(formPanel);
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.add(formPanel);
 
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
+
     }
 
-    private void editBrand(List<Brand> brands) {
+    // Method to edit a brand
+    public void handleEditBrand() {
         // Create a form to enter the brand name
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -244,21 +134,15 @@ public class AdminOptions extends JFrame {
         findButton.addActionListener(e -> {
             String brandName = nameField.getText().trim();
 
-            Brand brandToEdit = null;
-            for (Brand brand : BrandDatabase.getBrands()) {
-                if (brand.getName().equalsIgnoreCase(brandName)) {
-                    brandToEdit = brand;
-                    break;
-                }
-            }
+            Brand brandToEdit = CSVReader.getBrandFromFile(brandName);
 
             if (brandToEdit == null) {
                 JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 // Clear the right panel
-                rightPanel.removeAll();
-                rightPanel.revalidate();
-                rightPanel.repaint();
+                adminView.rightPanel.removeAll();
+                adminView.rightPanel.revalidate();
+                adminView.rightPanel.repaint();
 
                 // Call a method to edit the found brand and display the form on the right panel
                 editBrandDetails(brandToEdit);
@@ -284,13 +168,14 @@ public class AdminOptions extends JFrame {
         containerPanel.add(formPanel, containerGBC);
 
         // Clear the right panel and add the formPanel, filling the available space
-        rightPanel.removeAll();
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.add(containerPanel);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.add(containerPanel);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
     }
 
+    // Method to edit a brand
     private void editBrandDetails(Brand brandToEdit) {
         // Create a new right panel for editing
         JPanel editPanel = new JPanel(new BorderLayout());
@@ -345,9 +230,11 @@ public class AdminOptions extends JFrame {
             }
 
             if (!newCountry.isEmpty()) {
-                brandToEdit.setCountry(newCountry);
+                brandToEdit.setCountryOfOrigin(newCountry);
             }
 
+            // Update brand details in the CSV file
+            BrandDatabase.updateBrandInCSV(brandToEdit);
             // Show a success message
             JOptionPane.showMessageDialog(null, "Brand details updated successfully.");
 
@@ -367,89 +254,107 @@ public class AdminOptions extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(nameLabel, gbc);
-        gbc.gridy = 1;
+
+        gbc.gridy = 1; // Resetting the grid y constraint
         formPanel.add(nameField, gbc);
+
         gbc.gridy = 2;
         formPanel.add(categoryLabel, gbc);
+
         gbc.gridy = 3;
         formPanel.add(categoryField, gbc);
+
         gbc.gridy = 4;
         formPanel.add(yearFoundedLabel, gbc);
+
         gbc.gridy = 5;
         formPanel.add(yearFoundedField, gbc);
+
         gbc.gridy = 6;
         formPanel.add(countryOfOriginLabel, gbc);
+
         gbc.gridy = 7;
         formPanel.add(countryOfOriginField, gbc);
+
         gbc.gridy = 8;
         formPanel.add(saveButton, gbc);
 
-        // Add the formPanel to the editPanel
-        editPanel.add(formPanel, CENTER);
+// Add the formPanel to the editPanel
+        editPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Replace the right panel with the editPanel
-        rightPanel.remove(rightPanel);
-        rightPanel.add(editPanel, CENTER);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+// Remove all components from the right panel
+        adminView.rightPanel.removeAll();
+
+// Add the editPanel to the right panel
+        adminView.rightPanel.add(editPanel);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
+
     }
 
-    private void removeBrand(List<Brand> brands) {
-        // Create a form to enter the brand name for removal
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+    // Method to remove a brand
+    public void handleRemoveBrand() {
+        // Logic to remove a Brand from the model
+        // Update the UI through the BrandView
+            // Create a form to enter the brand name for removal
+            JPanel formPanel = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
 
-        JLabel nameLabel = new JLabel("Enter the name of the brand you want to remove:");
-        JTextField nameField = new JTextField(20);
-        JButton removeButton = new JButton("Remove Brand");
+            JLabel nameLabel = new JLabel("Enter the name of the brand you want to remove:");
+            JTextField nameField = new JTextField(20);
+            JButton removeButton = new JButton("Remove Brand");
 
-        removeButton.addActionListener(e -> {
-            String brandName = nameField.getText().trim();
+            removeButton.addActionListener(e -> {
+                String brandName = nameField.getText().trim();
+                Brand brandToRemove = CSVReader.getBrandFromFile(brandName);
 
-            if (brandName.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please enter the brand name to remove.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                // Confirm the removal with the admin
-                int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the brand: " + brandName + "?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
+                if (brandName.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please enter the brand name to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Confirm the removal with the admin
+                    int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the brand: " + brandName + "?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
 
-                if (confirmation == JOptionPane.YES_OPTION) {
-                    Brand brandToRemove = null;
-                    for (Brand brand : BrandDatabase.getBrands()) {
-                        if (brand.getName().equalsIgnoreCase(brandName)) {
-                            brandToRemove = brand;
-                            break;
+                    if (confirmation == JOptionPane.YES_OPTION) {
+                         brandToRemove = null;
+                        for (Brand brand : BrandDatabase.getBrands()) {
+                            if (brand.getName().equalsIgnoreCase(brandName)) {
+                                brandToRemove = brand;
+                                break;
+                            }
+                        }
+
+                        if (brandToRemove == null) {
+                            JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            BrandDatabase.removeBrandFromCSV(brandToRemove);
+                            JOptionPane.showMessageDialog(null, "Brand removed successfully.");
                         }
                     }
-
-                    if (brandToRemove == null) {
-                        JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        brands.remove(brandToRemove);
-                        JOptionPane.showMessageDialog(null, "Brand removed successfully.");
-                    }
                 }
-            }
-        });
+            });
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        formPanel.add(nameLabel, gbc);
-        gbc.gridy = 1;
-        formPanel.add(nameField, gbc);
-        gbc.gridy = 2;
-        formPanel.add(removeButton, gbc);
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.WEST;
+            formPanel.add(nameLabel, gbc);
+            gbc.gridy = 1;
+            formPanel.add(nameField, gbc);
+            gbc.gridy = 2;
+            formPanel.add(removeButton, gbc);
 
-        // Clear the right panel and add the formPanel
-        rightPanel.removeAll();
-        rightPanel.add(formPanel);
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.revalidate();
-        rightPanel.repaint();
+            // Clear the right panel and add the formPanel
+            adminView.rightPanel.removeAll();
+            adminView.rightPanel.add(formPanel);
+            adminView.rightPanel.setLayout(new GridBagLayout());
+            adminView.rightPanel.revalidate();
+            adminView.rightPanel.repaint();
     }
 
-    private void addProductToBrand(List<Brand> brands) {
+    // Method to add a product
+    public void handleAddProduct() {
+        // Logic to add a Product to a Brand in the model
+        // Update the UI through the BrandView
         // Create a form to enter product details
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -463,8 +368,7 @@ public class AdminOptions extends JFrame {
         JTextField priceField = new JTextField(20);
         JLabel descriptionLabel = new JLabel("Enter the description of the new product:");
         JTextField descriptionField = new JTextField(20);
-        JLabel quantityLabel = new JLabel("Enter the number of units in stock:");
-        JTextField quantityField = new JTextField(20);
+
         JLabel inventoryLabel = new JLabel("Enter the inventory level:");
         JTextField inventoryField = new JTextField(20);
         JButton addButton = new JButton("Add Product");
@@ -474,22 +378,19 @@ public class AdminOptions extends JFrame {
             String productName = productNameField.getText().trim();
             String priceStr = priceField.getText().trim();
             String description = descriptionField.getText().trim();
-            String quantityStr = quantityField.getText().trim();
             String inventoryStr = inventoryField.getText().trim();
 
             // Validate input
-            if (brandName.isEmpty() || productName.isEmpty() || priceStr.isEmpty() || description.isEmpty() || quantityStr.isEmpty() || inventoryStr.isEmpty()) {
+            if (brandName.isEmpty() || productName.isEmpty() || priceStr.isEmpty() || description.isEmpty() || inventoryStr.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             double productPrice;
-            int quantityInStock;
             int inventoryLevel;
 
             try {
                 productPrice = Double.parseDouble(priceStr);
-                quantityInStock = Integer.parseInt(quantityStr);
                 inventoryLevel = Integer.parseInt(inventoryStr);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Invalid input format. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -505,12 +406,15 @@ public class AdminOptions extends JFrame {
                 }
             }
 
+
+            // assign random score between 0-100
+            int popularityScore = new Random().nextInt(100);
+
             if (selectedBrand != null) {
                 // Create a new product
-                Product newProduct = new Product(productName, productPrice, description, quantityInStock);
-
+                Product newProduct = new Product(brandName, productName, productPrice, description, inventoryLevel, popularityScore);
                 // Add the new product to the selected brand
-                selectedBrand.addProduct(newProduct);
+                BrandDatabase.addProductToCSV(newProduct);
 
                 // Show a confirmation message
                 JOptionPane.showMessageDialog(null, "New product added to " + selectedBrand.getName() + ": " + productName);
@@ -520,7 +424,6 @@ public class AdminOptions extends JFrame {
                 productNameField.setText("");
                 priceField.setText("");
                 descriptionField.setText("");
-                quantityField.setText("");
                 inventoryField.setText("");
             } else {
                 JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -546,25 +449,25 @@ public class AdminOptions extends JFrame {
         gbc.gridy = 7;
         formPanel.add(descriptionField, gbc);
         gbc.gridy = 8;
-        formPanel.add(quantityLabel, gbc);
-        gbc.gridy = 9;
-        formPanel.add(quantityField, gbc);
-        gbc.gridy = 10;
         formPanel.add(inventoryLabel, gbc);
-        gbc.gridy = 11;
+        gbc.gridy = 9;
         formPanel.add(inventoryField, gbc);
-        gbc.gridy = 12;
+        gbc.gridy = 10;
         formPanel.add(addButton, gbc);
 
         // Clear the right panel and add the formPanel
-        rightPanel.removeAll();
-        rightPanel.add(formPanel);
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.add(formPanel);
+        adminView.rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
+
     }
 
-    private void removeProduct(List<Brand> brands) {
+    // Logic to remove a Product from a Brand in the model
+    public void handleRemoveProduct() {
+        // Logic to remove a Product from a Brand in the model
+        // Update the UI through the BrandView
         // Create a form to enter brand details for listing products
         JPanel brandFormPanel = new JPanel(new GridBagLayout());
         GridBagConstraints brandGBC = new GridBagConstraints();
@@ -608,9 +511,13 @@ public class AdminOptions extends JFrame {
 
                 // Create a list of products
                 DefaultListModel<String> productList = new DefaultListModel<>();
-                for (Product product : selectedBrand.getProducts()) {
-                    productList.addElement(product.getName());
+                List<Product> products = CSVReader.getProductsByBrand(selectedBrand.getName(),"C:/Users/USER/Desktop/Brand/src/Products.csv" );
+
+                for (Product product : products) {
+                    productList.addElement(product.getName()); // or any other property you want to display
                 }
+
+
                 // Create a JList to display products
                 JList<String> productListDisplay = new JList<>(productList);
                 JScrollPane productListScrollPane = new JScrollPane(productListDisplay);
@@ -620,8 +527,8 @@ public class AdminOptions extends JFrame {
 
                 // Display the products of the selected brand
                 productFormPanel.setVisible(true);
-                rightPanel.revalidate();
-                rightPanel.repaint();
+                adminView.rightPanel.revalidate();
+                adminView.rightPanel.repaint();
 
                 // Get the selected product for removal
                 productListDisplay.addListSelectionListener(listSelectionEvent -> {
@@ -638,12 +545,13 @@ public class AdminOptions extends JFrame {
 
                                 // Find the selected product
                                 Product productToRemove = null;
-                                for (Product product : selectedBrand.getProducts()) {
+                                for (Product product : products) {
                                     if (product.getName().equalsIgnoreCase(selectedProduct)) {
                                         productToRemove = product;
                                         break;
                                     }
                                 }
+
 
                                 if (productToRemove != null) {
                                     // Confirm product removal
@@ -651,7 +559,7 @@ public class AdminOptions extends JFrame {
                                             "Are you sure you want to remove the product: " + selectedProduct + " from " + selectedBrand.getName() + "?",
                                             "Confirm Removal", JOptionPane.YES_NO_OPTION);
                                     if (confirmDialogResult == JOptionPane.YES_OPTION) {
-                                        selectedBrand.removeProduct(productToRemove);
+                                        BrandDatabase.removeProductFromCSV(productToRemove);
                                         JOptionPane.showMessageDialog(null, "Product removed successfully.");
 
                                         // After removing the product, refresh the product list
@@ -678,22 +586,25 @@ public class AdminOptions extends JFrame {
         });
 
         // Add brand and product form panels to the right panel
-        rightPanel.removeAll();
-        rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
-        rightPanel.add(brandFormPanel, gbc);
+        adminView.rightPanel.add(brandFormPanel, gbc);
 
         gbc.gridy = 1;
-        rightPanel.add(productFormPanel, gbc);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.add(productFormPanel, gbc);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
     }
 
-    private void categorizeBrand(List<Brand> brands) {
+    // Categorize brands
+    public void handleCategorizeBrands() {
+        // Logic to categorize Brands
+        // Update the UI through the BrandView
         // Create a form to enter brand details for categorization
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -729,6 +640,7 @@ public class AdminOptions extends JFrame {
             if (selectedBrand != null) {
                 // Set the new category for the brand
                 selectedBrand.setCategory(newCategory);
+                BrandDatabase.updateBrandInCSV(selectedBrand);
                 JOptionPane.showMessageDialog(null, "Brand categorized successfully.");
             } else {
                 JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -749,14 +661,17 @@ public class AdminOptions extends JFrame {
         formPanel.add(categorizeButton, gbc);
 
         // Clear the right panel and add the formPanel
-        rightPanel.removeAll();
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.add(formPanel);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.add(formPanel);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
     }
 
-    private void updateProductInventory() {
+    // Manage Inventory
+    public void handleManageInventory() {
+        // Logic to generate reports
+        // Update the UI through the BrandView
         // Create a form to enter the brand name
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -769,17 +684,20 @@ public class AdminOptions extends JFrame {
         findBrandButton.addActionListener(e -> {
             String brandName = brandNameField.getText().trim();
 
+            Brand selectedBrand = CSVReader.getBrandFromFile(brandName);
             // Find the selected brand
-            Brand selectedBrand = BrandDatabase.getBrands().stream()
-                    .filter(brand -> brand.getName().equalsIgnoreCase(brandName))
-                    .findFirst()
-                    .orElse(null);
+
+
+            // Create a list of products
 
             if (selectedBrand != null) {
                 // Create a list of products
                 DefaultListModel<String> productList = new DefaultListModel<>();
-                for (Product product : selectedBrand.getProducts()) {
-                    productList.addElement(product.getName());
+                List<Product> products = CSVReader.getProductsByBrand(selectedBrand.getName(),"C:/Users/USER/Desktop/Brand/src/Products.csv" );
+
+                for (Product product : products) {
+                    productList.addElement(product.getName()); // or any other property you want to display
+
                 }
 
                 JList<String> productListDisplay = new JList<>(productList);
@@ -800,38 +718,40 @@ public class AdminOptions extends JFrame {
                     String selectedProduct = productListDisplay.getSelectedValue();
                     if (selectedProduct != null) {
                         int productChoice = productListDisplay.getSelectedIndex();
-                        Product productToUpdate = selectedBrand.getProducts().get(productChoice);
-                        int currentInventoryLevel = productToUpdate.getInventoryLevel();
-                        int newInventoryLevel = -1;
+                        if (productChoice >= 0 && productChoice < products.size()) {
+                            Product productToUpdate = products.get(productChoice);
+                            int currentInventoryLevel = productToUpdate.getInventoryLevel();
 
-                        String input = JOptionPane.showInputDialog("Current inventory level of " + selectedProduct + ": " + currentInventoryLevel + "\n"
-                                + "Enter the new inventory level:");
+                            String input = JOptionPane.showInputDialog(null,
+                                    "Current inventory level of " + selectedProduct + ": " + currentInventoryLevel + "\n"
+                                            + "Enter the new inventory level:");
 
-                        if (input == null) {
-                            // The user canceled the input dialog
-                            return; // Exit the ActionListener
-                        }
-
-                        try {
-                            newInventoryLevel = Integer.parseInt(input);
-                            if (newInventoryLevel < 0) {
-                                JOptionPane.showMessageDialog(null, "Inventory level must be a non-negative integer.", "Error", JOptionPane.ERROR_MESSAGE);
-                                return; // Don't update the inventory level on error
+                            if (input != null) {
+                                try {
+                                    int newInventoryLevel = Integer.parseInt(input);
+                                    if (newInventoryLevel >= 0) {
+                                        productToUpdate.setInventoryLevel(newInventoryLevel);
+                                        JOptionPane.showMessageDialog(null,
+                                                selectedProduct + " inventory level has been updated to " + newInventoryLevel);
+                                        BrandDatabase.updateProductInCSV(productToUpdate);
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "Inventory level must be a non-negative integer.",
+                                                "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                } catch (NumberFormatException ex) {
+                                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid integer.",
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
-
-                            productToUpdate.setInventoryLevel(newInventoryLevel);
-                            JOptionPane.showMessageDialog(null, selectedProduct + " inventory level has been updated to " + newInventoryLevel);
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid integer.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 });
                 // Clear the right panel and add the productPanel
-                rightPanel.removeAll();
-                rightPanel.setLayout(new BorderLayout());
-                rightPanel.add(productPanel, BorderLayout.CENTER);
-                rightPanel.revalidate();
-                rightPanel.repaint();
+                adminView.rightPanel.removeAll();
+                adminView.rightPanel.setLayout(new BorderLayout());
+                adminView.rightPanel.add(productPanel, BorderLayout.CENTER);
+                adminView.rightPanel.revalidate();
+                adminView.rightPanel.repaint();
             } else {
                 JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -847,14 +767,16 @@ public class AdminOptions extends JFrame {
         formPanel.add(findBrandButton, gbc);
 
         // Clear the right panel and add the formPanel
-        rightPanel.removeAll();
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.add(formPanel);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.add(formPanel);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
     }
 
-    private void checkBrandPerformance() {
+    // Performance
+    public void handleGenerateReports() {
+
         // Create a form to enter the brand name for performance check
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -868,69 +790,52 @@ public class AdminOptions extends JFrame {
             String brandName = brandNameField.getText().trim();
 
             // Find the selected brand
-            Brand selectedBrand = BrandDatabase.getBrands().stream().filter(brand -> brand.getName().equalsIgnoreCase(brandName)).findFirst().orElse(null);
+            Brand selectedBrand = CSVReader.getBrandFromFile(brandName);
 
             if (selectedBrand != null) {
                 // Create a panel to display performance data
                 JPanel performancePanel = new JPanel(new GridBagLayout());
 
                 // Display brand performance data
-                List<PerformanceData> performanceDataList = BrandDatabase.getPerformanceDataList();
+                List<Report> performanceDataList = BrandDatabase.getReports();
 
-                for (PerformanceData performanceData : performanceDataList) {
-                    if (performanceData.getName().equalsIgnoreCase(selectedBrand.getName())) {
-                        performancePanel.removeAll();
-
-                        JLabel brandNameLabel = new JLabel("Brand: " + performanceData.getName());
+                for (Report performanceData : performanceDataList) {
+                    if (performanceData.getBrandName().equalsIgnoreCase(selectedBrand.getName())) {
+                        JLabel brandNameLabel = new JLabel("Brand: " + performanceData.getBrandName());
                         performancePanel.add(brandNameLabel, gbc);
                         gbc.gridy++; // Move to the next row
 
                         // Display sales records
-                        List<SalesRecord> salesHistory = performanceData.getSalesHistory();
-                        JLabel salesRecordsLabel = new JLabel("Sales Records:");
-                        performancePanel.add(salesRecordsLabel, gbc);
+                        JLabel yearLabel = new JLabel("Year: " + performanceData.getYear());
+                        performancePanel.add(yearLabel, gbc);
                         gbc.gridy++; // Move to the next row
 
-                        for (SalesRecord salesRecord : salesHistory) {
-                            JLabel yearLabel = new JLabel("Year: " + salesRecord.getYear());
-                            performancePanel.add(yearLabel, gbc);
-                            gbc.gridy++; // Move to the next row
+                        JLabel quantitySoldLabel = new JLabel("Quantity Sold: " + performanceData.getQuantitySold());
+                        performancePanel.add(quantitySoldLabel, gbc);
+                        gbc.gridy++; // Move to the next row
 
-                            JLabel quantitySoldLabel = new JLabel("Quantity Sold: " + salesRecord.getQuantitySold());
-                            performancePanel.add(quantitySoldLabel, gbc);
-                            gbc.gridy++; // Move to the next row
-
-                            JLabel totalRevenueLabel = new JLabel("Total Revenue: " + salesRecord.getTotalRevenue());
-                            performancePanel.add(totalRevenueLabel, gbc);
-                            gbc.gridy++; // Move to the next row
-                        }
+                        JLabel totalRevenueLabel = new JLabel("Total Revenue: " + performanceData.getRevenue());
+                        performancePanel.add(totalRevenueLabel, gbc);
+                        gbc.gridy++; // Move to the next row
 
                         // Display product popularity
-                        List<ProductPopularity> productPopularity = performanceData.getProductPopularity();
-                        JLabel productPopularityLabel = new JLabel("Product Popularity:");
-                        performancePanel.add(productPopularityLabel, gbc);
+                        JLabel productNameLabel = new JLabel("Product Name: " + performanceData.getProductName());
+                        performancePanel.add(productNameLabel, gbc);
                         gbc.gridy++; // Move to the next row
 
-                        for (ProductPopularity popularity : productPopularity) {
-                            JLabel productNameLabel = new JLabel("Product Name: " + popularity.getProductName());
-                            performancePanel.add(productNameLabel, gbc);
-                            gbc.gridy++; // Move to the next row
-
-                            JLabel popularityScoreLabel = new JLabel("Popularity Score: " + popularity.getPopularityScore());
-                            performancePanel.add(popularityScoreLabel, gbc);
-                            gbc.gridy++; // Move to the next row
-                        }
-
-                        // Clear the right panel and add the performancePanel
-                        rightPanel.removeAll();
-                        rightPanel.setLayout(new GridBagLayout());
-                        rightPanel.add(performancePanel, gbc);
-                        rightPanel.revalidate();
-                        rightPanel.repaint();
+                        JLabel popularityScoreLabel = new JLabel("Popularity Score: " + performanceData.getProductPopularity());
+                        performancePanel.add(popularityScoreLabel, gbc);
+                        gbc.gridy++; // Move to the next row
                     }
                 }
 
-        } else {
+                // Clear the right panel and add the performancePanel
+                adminView.rightPanel.removeAll();
+                adminView.rightPanel.setLayout(new GridBagLayout());
+                adminView.rightPanel.add(performancePanel, gbc);
+                adminView.rightPanel.revalidate();
+                adminView.rightPanel.repaint();
+            } else {
                 JOptionPane.showMessageDialog(null, "Brand not found.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -945,14 +850,18 @@ public class AdminOptions extends JFrame {
         formPanel.add(checkPerformanceButton, gbc);
 
         // Clear the right panel and add the formPanel
-        rightPanel.removeAll();
-        rightPanel.setLayout(new GridBagLayout());
-        rightPanel.add(formPanel, gbc);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new GridBagLayout());
+        adminView.rightPanel.add(formPanel, gbc);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
+
     }
 
-    private void viewBrandReviews() {
+    // Monitor
+    public void handleMonitorUserFeedback() {
+        // Logic to monitor user feedback
+        // Update the UI through the BrandView
         // Create a form panel to search for a brand
         JPanel searchBrandPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -976,26 +885,25 @@ public class AdminOptions extends JFrame {
             String brandName = brandNameField.getText().trim();
 
             // Find the selected brand
-            Brand selectedBrand = BrandDatabase.getBrands().stream()
-                    .filter(brand -> brand.getName().equalsIgnoreCase(brandName))
-                    .findFirst()
-                    .orElse(null);
+            Brand selectedBrand = CSVReader.getBrandFromFile(brandName);
 
             if (selectedBrand != null) {
                 // Clear the reviews panel and display the reviews
                 reviewsPanel.removeAll();
 
-                List<UserReview> brandReviews = selectedBrand.getBrandReviews();
+                List<Reviews> brandReviews = BrandDatabase.getReviews();
 
                 if (brandReviews.isEmpty()) {
                     reviewsPanel.add(new JLabel("No reviews available for " + selectedBrand.getName()));
                 } else {
                     reviewsPanel.add(new JLabel("Reviews for " + selectedBrand.getName() + ":"));
-                    for (UserReview review : brandReviews) {
-                        reviewsPanel.add(new JLabel("Username: " + review.getUserName()));
-                        reviewsPanel.add(new JLabel("Rating: " + review.getRating() + " stars"));
-                        reviewsPanel.add(new JLabel("Review Text: " + review.getContent()));
-                        reviewsPanel.add(new JLabel()); // Add some space between reviews
+                    for (Reviews review : brandReviews) {
+                        if (review.getBrandName().equalsIgnoreCase(selectedBrand.getName())) {
+                            reviewsPanel.add(new JLabel("Username: " + review.getUserName()));
+                            reviewsPanel.add(new JLabel("Rating: " + review.getRating() + " stars"));
+                            reviewsPanel.add(new JLabel("Review Text: " + review.getComment()));
+                            reviewsPanel.add(new JLabel()); // Add some space between reviews
+                        }
                     }
                 }
 
@@ -1008,26 +916,20 @@ public class AdminOptions extends JFrame {
         });
 
         // Clear the right panel and add the searchBrandPanel and reviewsPanel
-        rightPanel.removeAll();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.add(searchBrandPanel);
-        rightPanel.add(reviewsPanel);
-        rightPanel.revalidate();
-        rightPanel.repaint();
+        adminView.rightPanel.removeAll();
+        adminView.rightPanel.setLayout(new BoxLayout(adminView.rightPanel, BoxLayout.Y_AXIS));
+        adminView.rightPanel.add(searchBrandPanel);
+        adminView.rightPanel.add(reviewsPanel);
+        adminView.rightPanel.revalidate();
+        adminView.rightPanel.repaint();
     }
 
-    private void exitPage () {
-        this.dispose();
+    // Exit
+    public void handleExitPage () {
+        adminView.dispose();
         new AdminLogin();
 
     }
 
-
-
-
-    // Run the page
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AdminOptions::new);
-    }
 
 }

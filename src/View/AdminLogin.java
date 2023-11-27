@@ -1,4 +1,4 @@
-package Swing.Frames;
+package View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,11 +54,11 @@ public class AdminLogin extends JFrame {
                 adminUsername = adminUsernameField.getText();
                 adminPassword = new String(adminPasswordField.getPassword()); // Retrieve the password securely
 
-                   // check if fields are empty
-                   if (adminUsername.isEmpty() || adminPassword.isEmpty()) {
+                // check if fields are empty
+                if (adminUsername.isEmpty() || adminPassword.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Please enter admin username and password", "Login Failed", JOptionPane.ERROR_MESSAGE);
 
-                    } else {openAdminOptionsFrame();}
+                } else {openAdminOptionsFrame();}
             }
         });
 
